@@ -38,11 +38,15 @@ public class DummyContent {
     }
 
     private static DummyItem createDummyItem(int position) {
+        int status = position % 2;
+        String serial = "DMPPP293BDSF" + String.valueOf(position);
+        String model = "iPad " + String.valueOf(position % 25);
+        String color = "Black";
         return new DummyItem(String.valueOf(position),
-                1,
-                "DMPPP293BDSFK11",
-                "iPad Air 2",
-                "black");
+                status,
+                serial,
+                model,
+                color);
     }
 
     /**
