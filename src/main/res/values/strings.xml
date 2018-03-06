@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Inventory App</string>
+    <string name="home_btn_users">Users</string>
+    <string name="home_btn_devices">Devices</string>
+    <string name="home_btn_checkin">Check In</string>
+    <string name="home_btn_checkout">Check Out</string>
+    <string name="title_device_list">Devices</string>
+    <string name="title_device_detail">Device Detail</string>
+</resources>
