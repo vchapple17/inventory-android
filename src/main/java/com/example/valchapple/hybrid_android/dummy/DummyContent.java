@@ -46,7 +46,7 @@ public class DummyContent {
                 status,
                 serial,
                 model,
-                color);
+                color); 
     }
 
     /**
