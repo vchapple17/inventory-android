@@ -122,8 +122,15 @@ public class DeviceListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mModelView.setText(mValues.get(position).model);
+            holder.mSerialView.setText(mValues.get(position).serial);
+            if (mValues.get(position).status == 1) {
+                holder.mStatusView.setText("CHECKED OUT");
+            }
+            else {
+                holder.mStatusView.setText("AVAILABLE");
+            }
+
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -135,13 +142,15 @@ public class DeviceListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mIdView;
-            final TextView mContentView;
+            final TextView mModelView;
+            final TextView mSerialView;
+            final TextView mStatusView;
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mModelView = (TextView) view.findViewById(R.id.model_text);
+                mSerialView = (TextView) view.findViewById(R.id.serial_text);
+                mStatusView = (TextView) view.findViewById(R.id.status_text);
             }
         }
     }

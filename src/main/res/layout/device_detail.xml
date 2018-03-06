@@ -1,10 +1,48 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/device_detail"
-    style="?android:attr/textAppearanceLarge"
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:text="@string/app_name"
-    android:textIsSelectable="true"
-    tools:context="com.example.valchapple.hybrid_android.DeviceDetailFragment" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/detail_device_serial"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:text="DMPP34SDF943KD"
+        android:textIsSelectable="true"
+        tools:context="com.example.valchapple.hybrid_android.DeviceDetailFragment" />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/detail_device_color"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:text="dummy color"
+        android:textColor="@color/colorText"
+        android:textIsSelectable="true"
+        tools:context="com.example.valchapple.hybrid_android.DeviceDetailFragment" />
+
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/detail_device_status"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_margin="10dp"
+        android:text="CHECKED OUT"
+        android:textStyle="bold"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:textIsSelectable="true"
+        tools:context="com.example.valchapple.hybrid_android.DeviceDetailFragment" />
+
+</LinearLayout>

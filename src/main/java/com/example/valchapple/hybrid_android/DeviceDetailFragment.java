@@ -49,7 +49,7 @@ public class DeviceDetailFragment extends Fragment {
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mItem.model);
             }
         }
     }
@@ -61,7 +61,15 @@ public class DeviceDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.device_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.detail_device_serial)).setText(mItem.serial);
+            ((TextView) rootView.findViewById(R.id.detail_device_color)).setText(mItem.color);
+            if (mItem.status == 1) {
+                ((TextView) rootView.findViewById(R.id.detail_device_status)).setText("CHECKED OUT");
+            }
+            else {
+                ((TextView) rootView.findViewById(R.id.detail_device_status)).setText("AVAILABLE");
+            }
+
         }
 
         return rootView;

@@ -38,16 +38,11 @@ public class DummyContent {
     }
 
     private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
-
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
+        return new DummyItem(String.valueOf(position),
+                1,
+                "DMPPP293BDSFK11",
+                "iPad Air 2",
+                "black");
     }
 
     /**
@@ -55,18 +50,22 @@ public class DummyContent {
      */
     public static class DummyItem {
         public final String id;
-        public final String content;
-        public final String details;
+        public final int status;
+        public final String serial;
+        public final String model;
+        public final String color;
 
-        public DummyItem(String id, String content, String details) {
+        public DummyItem(String id, int status, String serial, String model, String color) {
             this.id = id;
-            this.content = content;
-            this.details = details;
+            this.status = status;
+            this.serial = serial;
+            this.model = model;
+            this.color = color;
         }
 
         @Override
         public String toString() {
-            return content;
+            return serial;
         }
     }
 }
