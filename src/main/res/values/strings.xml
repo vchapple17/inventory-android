@@ -6,4 +6,15 @@
     <string name="home_btn_checkout">Check Out</string>
     <string name="title_device_list">Devices</string>
     <string name="title_device_detail">Device Detail</string>
+    <string name="title_device_detail_edit">Add/Edit Device Instructions</string>
+    <string name="label_first_name">First:</string>
+    <string name="hint_first_name">First Name</string>
+    <string name="label_family_name">Last:</string>
+    <string name="hint_family_name">Last Name</string>
+    <string name="label_group">Group:</string>
+    <string name="label_device_serial">Serial: </string>
+    <string name="hint_device_serial">Serial Number</string>
+    <string name="label_device_model">Model: </string>
+    <string name="label_device_color">Color: </string>
+    <string name="label_device_save">Save Device</string>
 </resources>
