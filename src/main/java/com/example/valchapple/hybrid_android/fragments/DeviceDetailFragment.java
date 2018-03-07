@@ -1,4 +1,4 @@
-package com.example.valchapple.hybrid_android;
+package com.example.valchapple.hybrid_android.fragments;
 
 import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.valchapple.hybrid_android.R;
 import com.example.valchapple.hybrid_android.dummy.DummyContent;
+import com.example.valchapple.hybrid_android.activities.DeviceListActivity;
+import com.example.valchapple.hybrid_android.activities.DeviceDetailActivity;
 
 /**
  * A fragment representing a single Device detail screen.

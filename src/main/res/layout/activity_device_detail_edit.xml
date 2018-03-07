@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.valchapple.hybrid_android.DeviceDetailEditActivity">
+    tools:context="com.example.valchapple.hybrid_android.activities.DeviceDetailEditActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:layout_margin="10dp"
                 android:text="@string/label_device_model" />
             <Spinner
-                android:id="@+id/device_model_spinner"
+                android:id="@+id/device_save_model_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown"
@@ -74,7 +74,7 @@
                 android:layout_margin="10dp"
                 android:text="@string/label_device_color" />
             <Spinner
-                android:id="@+id/device_color_spinner"
+                android:id="@+id/device_save_color_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown"

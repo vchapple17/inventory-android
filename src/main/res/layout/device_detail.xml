@@ -14,7 +14,7 @@
         android:padding="16dp"
         android:text="DMPP34SDF943KD"
         android:textIsSelectable="true"
-        tools:context="com.example.valchapple.hybrid_android.DeviceDetailFragment" />
+        tools:context="com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment" />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -26,7 +26,7 @@
         android:text="dummy color"
         android:textColor="@color/colorText"
         android:textIsSelectable="true"
-        tools:context="com.example.valchapple.hybrid_android.DeviceDetailFragment" />
+        tools:context="com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment" />
 
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -43,6 +43,6 @@
         android:gravity="center"
         android:textColor="@color/colorAccent"
         android:textIsSelectable="true"
-        tools:context="com.example.valchapple.hybrid_android.DeviceDetailFragment" />
+        tools:context="com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment" />
 
 </LinearLayout>

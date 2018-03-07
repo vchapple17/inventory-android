@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,20 +17,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeviceListActivity"
+            android:name=".activities.DeviceListActivity"
             android:label="@string/title_device_list"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.valchapple.hybrid_android.activities.MainActivity" />
         <activity
-            android:name=".DeviceDetailActivity"
+            android:name=".activities.DeviceDetailActivity"
             android:label="@string/title_device_detail"
-            android:parentActivityName=".DeviceListActivity"
+            android:parentActivityName=".activities.DeviceListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.valchapple.hybrid_android.DeviceListActivity" />
+                android:value="com.example.valchapple.hybrid_android.activities.DeviceListActivity" />
         </activity>
-        <activity android:name=".DeviceDetailEditActivity"></activity>
+        <activity
+            android:name=".activities.DeviceDetailEditActivity"
+            android:label="@string/title_device_detail_edit"
+            android:parentActivityName=".activities.DeviceListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.valchapple.hybrid_android.activities.DeviceListActivity" />
+
+        </activity>
     </application>
 
 </manifest>
