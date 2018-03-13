@@ -19,8 +19,13 @@ import com.example.valchapple.hybrid_android.activities.DeviceDetailEditActivity
 import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.R;
 import com.example.valchapple.hybrid_android.dummy.DummyContent;
+import com.example.valchapple.hybrid_android.models.Device;
+import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
 import java.util.List;
+
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 
 /**
  * An activity representing a list of Devices. This activity
@@ -46,6 +51,14 @@ public class DeviceListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+
+        HttpUrl reqUrl = HttpUrl.parse("https://hybrid-project-20180223.appspot.com/devices");
+//        reqUrl = reqUrl.newBuilder().addQueryParameter("key", "AIzaSyDsx70aHdYtjvCMIDHtlK-Ni3Qf--fwURg").build();
+
+//        getOkHttpClient();
+        MyHttpClient client = (MyHttpClient)getApplicationContext();
+//        OkHttpClient c = client.getOkHttpClient();
+        Device.getDevices(client, reqUrl);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
