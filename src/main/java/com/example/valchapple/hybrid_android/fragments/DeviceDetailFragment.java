@@ -3,11 +3,13 @@ package com.example.valchapple.hybrid_android.fragments;
 import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.valchapple.hybrid_android.R;
@@ -69,6 +71,16 @@ public class DeviceDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.detail_device_color)).setText(mItem.getColorText());
             ((TextView) rootView.findViewById(R.id.detail_device_status)).setText(mItem.getStatusText());
         }
+
+        // Add Edit button
+        Button edit_btn = (Button) rootView.findViewById(R.id.detail_device_edit_button);
+        edit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         return rootView;
     }

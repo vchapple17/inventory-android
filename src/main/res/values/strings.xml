@@ -17,4 +17,5 @@
     <string name="label_device_model">Model: </string>
     <string name="label_device_color">Color: </string>
     <string name="label_device_save">Save Device</string>
+    <string name="btn_device_detail_edit_btn">Edit Device</string>
 </resources>

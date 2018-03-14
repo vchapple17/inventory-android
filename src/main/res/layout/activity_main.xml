@@ -24,6 +24,7 @@
 
         <Button
             android:id="@+id/btn_devices"
+            style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -34,6 +35,7 @@
 
         <Button
             android:id="@+id/btn_users"
+            style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -44,6 +46,7 @@
 
         <Button
             android:id="@+id/btn_checkin"
+            style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -54,6 +57,7 @@
 
         <Button
             android:id="@+id/btn_checkout"
+            style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
