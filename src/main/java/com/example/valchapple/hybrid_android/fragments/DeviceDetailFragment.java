@@ -93,11 +93,25 @@ public class DeviceDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Activity context = getActivity();
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Edit Device", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
                 Intent intent = new Intent(context, DeviceDetailEditActivity.class);
                 intent.putExtra(ARG_DEVICE_ID, getArguments().getString(ARG_DEVICE_ID));
                 context.startActivityForResult(intent, DeviceDetailActivity.EDIT_REQUEST);
+            }
+        });
+
+        // Add Delete Button
+        Button delete_btn = rootView.findViewById(R.id.detail_device_delete_button);
+        delete_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Activity context = getActivity();
+                Snackbar.make(view, "Delete Device", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+//                Intent intent = new Intent(context, DeviceDetailEditActivity.class);
+//                intent.putExtra(ARG_DEVICE_ID, getArguments().getString(ARG_DEVICE_ID));
+//                context.startActivityForResult(intent, DeviceDetailActivity.EDIT_REQUEST);
             }
         });
 
