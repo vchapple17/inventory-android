@@ -4,26 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.models.Device;
-import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.HttpUrl;
 
 /**
  * An activity representing a list of Devices. This activity
@@ -46,14 +43,9 @@ public class DeviceListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-
-//        HttpUrl reqUrl = HttpUrl.parse("https://hybrid-project-20180223.appspot.com/devices");
-////        reqUrl = reqUrl.newBuilder().addQueryParameter("key", "AIzaSyDsx70aHdYtjvCMIDHtlK-Ni3Qf--fwURg").build();
-//        MyHttpClient client = (MyHttpClient)getApplicationContext();
-//        Device.requestDevices(client, reqUrl);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -61,7 +53,7 @@ public class DeviceListActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,17 +64,12 @@ public class DeviceListActivity extends AppCompatActivity {
         });
 
         if (findViewById(R.id.device_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
 
         View recyclerView = findViewById(R.id.device_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-//        recyclerView.invalidate();
     }
 
     @Override

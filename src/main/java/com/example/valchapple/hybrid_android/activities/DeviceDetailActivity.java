@@ -69,17 +69,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
         }
     }
 
-        // Refresh table
-//        Bundle arguments = new Bundle();
-//        arguments.putString(com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment.ARG_DEVICE_ID,
-//                getIntent().getStringExtra(com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment.ARG_DEVICE_ID));
-//        com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment fragment = new com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment();
-//        fragment.setArguments(arguments);
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.device_detail_container, fragment)
-//                .commit();
-//    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDIT_REQUEST) {

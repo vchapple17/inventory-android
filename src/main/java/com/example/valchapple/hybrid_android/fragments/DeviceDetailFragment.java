@@ -1,13 +1,10 @@
 package com.example.valchapple.hybrid_android.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.valchapple.hybrid_android.R;
 import com.example.valchapple.hybrid_android.activities.DeviceDetailEditActivity;
-import com.example.valchapple.hybrid_android.activities.MainActivity;
 import com.example.valchapple.hybrid_android.models.Device;
 import com.example.valchapple.hybrid_android.activities.DeviceListActivity;
 import com.example.valchapple.hybrid_android.activities.DeviceDetailActivity;
@@ -101,9 +97,8 @@ public class DeviceDetailFragment extends Fragment {
                         .setAction("Action", null).show();
                 Intent intent = new Intent(context, DeviceDetailEditActivity.class);
                 intent.putExtra(ARG_DEVICE_ID, getArguments().getString(ARG_DEVICE_ID));
-//                context.startActivity(intent);
                 context.startActivityForResult(intent, DeviceDetailActivity.EDIT_REQUEST);
-            };
+            }
         });
 
         return rootView;
