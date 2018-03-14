@@ -105,6 +105,30 @@ public class Device {
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return null;
+        }
+        return d.toString();
+    }
+
+    public static String makePatchString(String model, String color, String serial_no) {
+        JSONObject d = new JSONObject();
+        try {
+            if (model != null) {
+                d.put("model", model);
+            }
+            if (color != null) {
+                d.put("color", color);
+            }
+            if (serial_no != null) {
+                d.put("serial_no", serial_no);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (d.length() < 1) {
+            return null;
         }
         return d.toString();
     }
@@ -148,6 +172,10 @@ public class Device {
     public static boolean postDeviceDetails(MyHttpClient client, String serial, String model, String color) {
         HttpUrl url = HttpUrl.parse(devicesURL);
         String postString = makePostString(model, color, serial);
+        if (postString == null) {
+            return false;
+        }
+
         Log.d("postDeviceDetails", postString);
         RequestBody reqBody = RequestBody.create(MEDIA_TYPE_JSON, postString );
 
@@ -160,7 +188,8 @@ public class Device {
             JSONObject device_obj = new JSONObject(r);
             Device d = readJSONDevice(device_obj);;
             Device.DEVICE_MAP.put(d.id, d);
-            Device.devices.add(d);
+//            Device.devices.add(d);
+            Device.requestDevices(client);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -176,31 +205,40 @@ public class Device {
 
 
 
-    public static boolean patchDeviceDetails(MyHttpClient client, String serial, String model, String color) {
-        // Return 1 for successful save
-        // Return 0 for failed save
-//        HttpUrl url = HttpUrl.parse(devicesURL);
-//
-//        RequestBody reqBody = RequestBody(MEDIA_TYPE_JSON),
-//        Request request = new Request.Builder().url(url).build();
-//
-//        OkHttpClient okHttp = client.getOkHttpClient();
-//        try {
-//            Response response = okHttp.newCall(request).execute();
-//            String r = response.body().string();
-//            JSONObject device_obj = new JSONObject(r);
-//            Device d = readJSONDevice(device_obj);;
-//            Device.DEVICE_MAP.put(d.id, d);
-//            Device.devices.add(d);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//        catch (JSONException e) {
-//            e.printStackTrace();
-//            return false;
-//        };
+    public static boolean patchDeviceDetails(MyHttpClient client, String device_id, String serial, String model, String color) {
+        if ((device_id == null) || (device_id.length() < 1)) {
+            return false;
+        }
+        String patchString = makePatchString(model, color, serial);
+        if (patchString == null) {
+            return false;
+        }
 
-        return true;
+        String device_string = devicesURL + "/" + device_id;
+        HttpUrl url = HttpUrl.parse(device_string);
+
+        RequestBody reqBody = RequestBody.create(MEDIA_TYPE_JSON, patchString);
+        Request request = new Request.Builder().patch(reqBody).url(url).build();
+        OkHttpClient okHttp = client.getOkHttpClient();
+
+        try{
+            Response response = okHttp.newCall(request).execute();
+            String r = response.body().string();
+            JSONObject device_obj = new JSONObject(r);
+            Device d = readJSONDevice(device_obj);;
+            Device.DEVICE_MAP.put(d.id, d);
+            Device.requestDevices(client);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return false;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

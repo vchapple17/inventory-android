@@ -57,16 +57,12 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         try {
             if (intent.getExtras() != null) {
-//                if (intent.getExtras().containsKey(DeviceDetailFragment.ARG_DEVICE_ID)
                 device_id = intent.getStringExtra(DeviceDetailFragment.ARG_DEVICE_ID);
                 if (device_id != null) {
                     Device d = Device.DEVICE_MAP.get(device_id);
                     String device_serial = d.getSerialText();
                     String device_model = d.getModelText();
                     String device_color = d.getColorText();
-//                String device_serial = intent.getStringExtra("device_serial");
-//                String device_model = intent.getStringExtra("device_model");
-//                String device_color = intent.getStringExtra("device_color");
 
                     // Set Serial Number
                     mSerialTextView.setText(device_serial);
@@ -80,6 +76,8 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
             }
         } catch(NullPointerException e) {
             e.printStackTrace();
+            setResult(RESULT_CANCELED);
+            finish();
         }
 
         mSaveButton.setOnClickListener( new View.OnClickListener() {
@@ -92,6 +90,9 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
                     CharSequence text = "Saved";
                     Toast toast = Toast.makeText(DeviceDetailEditActivity.this, text, duration);
                     toast.show();
+                    Intent returnIntent = new Intent();
+//                    returnIntent.putExtra("update", true);
+                    setResult(RESULT_OK,returnIntent);
                     finish();
                 }
                 else {
@@ -100,13 +101,13 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
                     CharSequence text = "Failed to save";
                     Toast toast = Toast.makeText(DeviceDetailEditActivity.this, text, duration);
                     toast.show();
+//                    Intent returnIntent = new Intent();
+                    setResult(RESULT_CANCELED);
+//                    finish();
                 }
             }
 
         });
-
-
-
     }
 
     private boolean saveDeviceDetails() {
@@ -148,7 +149,7 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         else {
             // Save Existing device
             Log.d("saveDeviceDetails", "patch");
-            return Device.patchDeviceDetails(client, serial, model, color);
+            return Device.patchDeviceDetails(client, device_id, serial, model, color);
         }
     }
 

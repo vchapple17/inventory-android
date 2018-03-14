@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public class DeviceDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_DEVICE_ID = "device_id";
+
 
     /**
      * The content this fragment is presenting.
@@ -64,6 +66,19 @@ public class DeviceDetailFragment extends Fragment {
             }
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getArguments().containsKey(ARG_DEVICE_ID)) {
+            mItem = Device.DEVICE_MAP.get(getArguments().getString(ARG_DEVICE_ID));
+
+            Activity activity = this.getActivity();
+            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
+            if (appBarLayout != null) {
+                appBarLayout.setTitle(mItem.model);
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,15 +96,17 @@ public class DeviceDetailFragment extends Fragment {
         edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Context context = getActivity();
+                Activity context = getActivity();
                 Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intent = new Intent(context, DeviceDetailEditActivity.class);
                 intent.putExtra(ARG_DEVICE_ID, getArguments().getString(ARG_DEVICE_ID));
-                context.startActivity(intent);
+//                context.startActivity(intent);
+                context.startActivityForResult(intent, DeviceDetailActivity.EDIT_REQUEST);
             };
         });
 
         return rootView;
     }
+
 }

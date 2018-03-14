@@ -2,15 +2,11 @@ package com.example.valchapple.hybrid_android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.R;
@@ -23,14 +19,14 @@ import com.example.valchapple.hybrid_android.R;
  */
 public class DeviceDetailActivity extends AppCompatActivity {
 
+    public static final int EDIT_REQUEST = 1;
+    public static final int NEW_REQUEST = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-
-
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -58,6 +54,52 @@ public class DeviceDetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.device_detail_container, fragment)
                     .commit();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        android.support.v4.app.Fragment currentFragment = this.getSupportFragmentManager().findFragmentById(R.id.device_detail_container);
+        if (currentFragment instanceof DeviceDetailFragment) {
+            android.support.v4.app.FragmentTransaction fragTransaction =   this.getSupportFragmentManager().beginTransaction();
+            fragTransaction.detach(currentFragment);
+            fragTransaction.attach(currentFragment);
+            fragTransaction.commit();
+        }
+    }
+
+        // Refresh table
+//        Bundle arguments = new Bundle();
+//        arguments.putString(com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment.ARG_DEVICE_ID,
+//                getIntent().getStringExtra(com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment.ARG_DEVICE_ID));
+//        com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment fragment = new com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment();
+//        fragment.setArguments(arguments);
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.device_detail_container, fragment)
+//                .commit();
+//    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EDIT_REQUEST) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    super.onResume();
+                    break;
+                default:
+                    return;
+            }
+        } else if (requestCode == NEW_REQUEST) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    onResume();
+                    break;
+                default:
+                    return;
+            }
         }
     }
 
