@@ -62,7 +62,7 @@ public class DeviceDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        RecyclerView rootView = (RecyclerView) inflater.inflate(R.layout.device_detail, container, false);
+        View rootView = inflater.inflate(R.layout.device_detail, container, false);
 
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.detail_device_serial)).setText(mItem.getSerialText());
