@@ -40,12 +40,12 @@ public class DeviceListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private DeviceRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -82,10 +82,18 @@ public class DeviceListActivity extends AppCompatActivity {
         View recyclerView = findViewById(R.id.device_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+//        recyclerView.invalidate();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new DeviceRecyclerViewAdapter(this, Device.getDevices(), mTwoPane));
+        mAdapter = new DeviceRecyclerViewAdapter(this, Device.getDevices(), mTwoPane);
+        recyclerView.setAdapter(mAdapter);
     }
 
 
@@ -104,21 +112,6 @@ public class DeviceListActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, DeviceDetailActivity.class);
                 intent.putExtra(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
                 context.startActivity(intent);
-
-//                if (mTwoPane) {
-//                    Bundle arguments = new Bundle();
-//                    arguments.putString(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
-//                    DeviceDetailFragment fragment = new DeviceDetailFragment();
-//                    fragment.setArguments(arguments);
-//                    mParentActivity.getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.device_detail_container, fragment)
-//                            .commit();
-//                } else {
-//                    Context context = view.getContext();
-//                    Intent intent = new Intent(context, DeviceDetailActivity.class);
-//                    intent.putExtra(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
-//                    context.startActivity(intent);
-//                }
             }
         };
 

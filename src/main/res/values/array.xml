@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="device_model_array">
+        <item>LENOVO</item>
+        <item>IPAD_4TH</item>
+        <item>IPAD_AIR</item>
+        <item>IPAD_AIR2</item>
+    </string-array>
+
+    <string-array name="device_color_array">
+        <item>SILVER</item>
+        <item>SPACE_GRAY</item>
+        <item>GOLD</item>
+        <item>ROSE_GOLD</item>
+    </string-array>
+</resources>

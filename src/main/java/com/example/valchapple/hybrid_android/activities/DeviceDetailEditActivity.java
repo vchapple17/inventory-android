@@ -5,11 +5,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.models.Device;
+import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
 public class DeviceDetailEditActivity extends AppCompatActivity {
 
@@ -36,6 +40,17 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         mColorSpinner = findViewById(R.id.device_save_color_spinner);
         mSaveButton = findViewById(R.id.device_save_button);
 
+        // Spinner Values
+        ArrayAdapter<CharSequence> modelAdapter = ArrayAdapter.createFromResource(this,
+                R.array.device_model_array, android.R.layout.simple_spinner_item);
+        modelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mModelSpinner.setAdapter(modelAdapter);
+
+        ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this,
+                R.array.device_color_array, android.R.layout.simple_spinner_item);
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mColorSpinner.setAdapter(colorAdapter);
+
         // Put Data To Fill
         Intent intent = getIntent();
         device_id = intent.getStringExtra("device_id");
@@ -58,12 +73,20 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         mSaveButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (saveDeviceDetails() == 1) {
+                if (saveDeviceDetails()) {
                     // Save Success
-
+                    int duration = Toast.LENGTH_SHORT;
+                    CharSequence text = "Saved";
+                    Toast toast = Toast.makeText(DeviceDetailEditActivity.this, text, duration);
+                    toast.show();
+                    finish();
                 }
                 else {
                     // Save Failed
+                    int duration = Toast.LENGTH_SHORT;
+                    CharSequence text = "Failed to save";
+                    Toast toast = Toast.makeText(DeviceDetailEditActivity.this, text, duration);
+                    toast.show();
                 }
             }
 
@@ -73,7 +96,7 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
 
     }
 
-    private int saveDeviceDetails() {
+    private boolean saveDeviceDetails() {
         // Return 1 for successful save
         // Return 0 for failed save
         String serial;
@@ -81,62 +104,38 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         String color;
 
         // Collect Data From Form
-        if (mSerialTextView != null) {
+        try {
             serial = mSerialTextView.getText().toString();
             if (serial.length() < 1) {
-                return 0;
+                return false;
             }
-        }
-        else {
-            return 0;
-        }
-        if (mModelSpinner != null) {
+
             model = mModelSpinner.getSelectedItem().toString();
             if (model.length() < 1) {
-                return 0;
+                return false;
             }
-        }
-        else {
-            return 0;
-        }
 
-        if (mColorSpinner != null) {
             color = mColorSpinner.getSelectedItem().toString();
             if (color.length() < 1) {
-                return 0;
+                return false;
             }
+
         }
-        else {
-            return 0;
+        catch (NullPointerException e) {
+            return false;
         }
 
+        MyHttpClient client = (MyHttpClient)getApplicationContext();
         // If device_id is null, create new Device, else PATCH
         if (this.device_id == null) {
             // Create new device
-            return postDeviceDetails(serial, model, color);
+            return Device.postDeviceDetails(client, serial, model, color);
         }
         else {
             // Save Existing device
-            return patchDeviceDetails(serial, model, color);
+            return Device.patchDeviceDetails(client, serial, model, color);
         }
     }
-
-    private int postDeviceDetails(String serial, String model, String color) {
-        // Return 1 for successful save
-        // Return 0 for failed save
-
-
-        return 1;
-    }
-
-    private int patchDeviceDetails(String serial, String model, String color) {
-        // Return 1 for successful save
-        // Return 0 for failed save
-
-
-        return 1;
-    }
-
 
 
     private int getIndex(Spinner spinner, String str) {
