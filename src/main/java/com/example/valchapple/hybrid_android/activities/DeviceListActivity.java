@@ -15,17 +15,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import com.example.valchapple.hybrid_android.activities.DeviceDetailEditActivity;
 import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.R;
-import com.example.valchapple.hybrid_android.dummy.DummyContent;
 import com.example.valchapple.hybrid_android.models.Device;
 import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 
 /**
  * An activity representing a list of Devices. This activity
@@ -52,13 +50,10 @@ public class DeviceListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        HttpUrl reqUrl = HttpUrl.parse("https://hybrid-project-20180223.appspot.com/devices");
-//        reqUrl = reqUrl.newBuilder().addQueryParameter("key", "AIzaSyDsx70aHdYtjvCMIDHtlK-Ni3Qf--fwURg").build();
-
-//        getOkHttpClient();
-        MyHttpClient client = (MyHttpClient)getApplicationContext();
-//        OkHttpClient c = client.getOkHttpClient();
-        Device.getDevices(client, reqUrl);
+//        HttpUrl reqUrl = HttpUrl.parse("https://hybrid-project-20180223.appspot.com/devices");
+////        reqUrl = reqUrl.newBuilder().addQueryParameter("key", "AIzaSyDsx70aHdYtjvCMIDHtlK-Ni3Qf--fwURg").build();
+//        MyHttpClient client = (MyHttpClient)getApplicationContext();
+//        Device.requestDevices(client, reqUrl);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -71,7 +66,6 @@ public class DeviceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DeviceListActivity.this, DeviceDetailEditActivity.class);
-//                intent.putExtra("device_id", null);
                 startActivity(intent);
 
             }
@@ -91,47 +85,53 @@ public class DeviceListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+        recyclerView.setAdapter(new DeviceRecyclerViewAdapter(this, Device.getDevices(), mTwoPane));
     }
 
-    public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final DeviceListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
-        private final boolean mTwoPane;
+    public static class DeviceRecyclerViewAdapter
+            extends RecyclerView.Adapter<DeviceRecyclerViewAdapter.ViewHolder> {
+
+        private DeviceListActivity mParentActivity;
+        private List<Device> mValues = new ArrayList<>();
+        private boolean mTwoPane;
+
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
-                if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putString(DeviceDetailFragment.ARG_ITEM_ID, item.id);
-                    DeviceDetailFragment fragment = new DeviceDetailFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.device_detail_container, fragment)
-                            .commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, DeviceDetailActivity.class);
-                    intent.putExtra(DeviceDetailFragment.ARG_ITEM_ID, item.id);
+                Device device = (Device) view.getTag();
+                Context context = view.getContext();
+                Intent intent = new Intent(context, DeviceDetailActivity.class);
+                intent.putExtra(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
+                context.startActivity(intent);
 
-                    context.startActivity(intent);
-                }
+//                if (mTwoPane) {
+//                    Bundle arguments = new Bundle();
+//                    arguments.putString(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
+//                    DeviceDetailFragment fragment = new DeviceDetailFragment();
+//                    fragment.setArguments(arguments);
+//                    mParentActivity.getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.device_detail_container, fragment)
+//                            .commit();
+//                } else {
+//                    Context context = view.getContext();
+//                    Intent intent = new Intent(context, DeviceDetailActivity.class);
+//                    intent.putExtra(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
+//                    context.startActivity(intent);
+//                }
             }
         };
 
-        SimpleItemRecyclerViewAdapter(DeviceListActivity parent,
-                                      List<DummyContent.DummyItem> items,
+        DeviceRecyclerViewAdapter(DeviceListActivity parent,
+                                      List<Device> devices,
                                       boolean twoPane) {
-            mValues = items;
+            mValues = devices;
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public DeviceRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.device_list_content, parent, false);
             return new ViewHolder(view);
@@ -139,15 +139,9 @@ public class DeviceListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mModelView.setText(mValues.get(position).model);
-            holder.mSerialView.setText(mValues.get(position).serial);
-            if (mValues.get(position).status == 1) {
-                holder.mStatusView.setText("CHECKED OUT");
-            }
-            else {
-                holder.mStatusView.setText("AVAILABLE");
-            }
-
+            holder.mModelView.setText(mValues.get(position).getModelText());
+            holder.mSerialView.setText(mValues.get(position).getSerialText());
+            holder.mStatusView.setText(mValues.get(position).getStatusText());
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
