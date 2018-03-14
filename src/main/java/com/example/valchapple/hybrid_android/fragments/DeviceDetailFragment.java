@@ -1,11 +1,13 @@
 package com.example.valchapple.hybrid_android.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.activities.DeviceDetailEditActivity;
+import com.example.valchapple.hybrid_android.activities.MainActivity;
 import com.example.valchapple.hybrid_android.models.Device;
 import com.example.valchapple.hybrid_android.activities.DeviceListActivity;
 import com.example.valchapple.hybrid_android.activities.DeviceDetailActivity;
@@ -54,7 +58,7 @@ public class DeviceDetailFragment extends Fragment {
             mItem = Device.DEVICE_MAP.get(getArguments().getString(ARG_DEVICE_ID));
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.model);
             }
@@ -73,13 +77,17 @@ public class DeviceDetailFragment extends Fragment {
         }
 
         // Add Edit button
-        Button edit_btn = (Button) rootView.findViewById(R.id.detail_device_edit_button);
+        Button edit_btn = rootView.findViewById(R.id.detail_device_edit_button);
         edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Context context = getActivity();
                 Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            }
+                Intent intent = new Intent(context, DeviceDetailEditActivity.class);
+                intent.putExtra(ARG_DEVICE_ID, getArguments().getString(ARG_DEVICE_ID));
+                context.startActivity(intent);
+            };
         });
 
         return rootView;

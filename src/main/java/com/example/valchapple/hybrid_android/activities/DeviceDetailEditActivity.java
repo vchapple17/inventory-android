@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.models.Device;
 import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
@@ -51,28 +53,39 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mColorSpinner.setAdapter(colorAdapter);
 
-        // Put Data To Fill
+//         Pre-fill form if editing previous
         Intent intent = getIntent();
-        device_id = intent.getStringExtra("device_id");
-        // Pre-fill form if editing previous
-        if (device_id != null) {
-            String device_serial = intent.getStringExtra("device_serial");
-            String device_model = intent.getStringExtra("device_model");
-            String device_color = intent.getStringExtra("device_color");
+        try {
+            if (intent.getExtras() != null) {
+//                if (intent.getExtras().containsKey(DeviceDetailFragment.ARG_DEVICE_ID)
+                device_id = intent.getStringExtra(DeviceDetailFragment.ARG_DEVICE_ID);
+                if (device_id != null) {
+                    Device d = Device.DEVICE_MAP.get(device_id);
+                    String device_serial = d.getSerialText();
+                    String device_model = d.getModelText();
+                    String device_color = d.getColorText();
+//                String device_serial = intent.getStringExtra("device_serial");
+//                String device_model = intent.getStringExtra("device_model");
+//                String device_color = intent.getStringExtra("device_color");
 
-            // Set Serial Number
-            mSerialTextView.setText(device_serial);
+                    // Set Serial Number
+                    mSerialTextView.setText(device_serial);
 
-            // Set Model - Defaults to matching model or 0 index on spinner
-            mModelSpinner.setSelection(getIndex(mModelSpinner, device_model));
+                    // Set Model - Defaults to matching model or 0 index on spinner
+                    mModelSpinner.setSelection(getIndex(mModelSpinner, device_model));
 
-            // Set Color - Defaults to color matched or 0 index on spinner
-            mColorSpinner.setSelection(getIndex(mColorSpinner, device_color));
+                    // Set Color - Defaults to color matched or 0 index on spinner
+                    mColorSpinner.setSelection(getIndex(mColorSpinner, device_color));
+                }
+            }
+        } catch(NullPointerException e) {
+            e.printStackTrace();
         }
 
         mSaveButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("mSaveButton", ".setOnClickListener");
                 if (saveDeviceDetails()) {
                     // Save Success
                     int duration = Toast.LENGTH_SHORT;
@@ -129,10 +142,12 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         // If device_id is null, create new Device, else PATCH
         if (this.device_id == null) {
             // Create new device
+            Log.d("saveDeviceDetails", "post");
             return Device.postDeviceDetails(client, serial, model, color);
         }
         else {
             // Save Existing device
+            Log.d("saveDeviceDetails", "patch");
             return Device.patchDeviceDetails(client, serial, model, color);
         }
     }
