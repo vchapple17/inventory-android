@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class DeviceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DeviceListActivity.this, DeviceDetailEditActivity.class);
-                startActivityForResult(intent, DeviceDetailActivity.VIEW_REQUEST);
+                startActivityForResult(intent, DeviceDetailActivity.NEW_REQUEST);
             }
         });
 
@@ -73,25 +74,32 @@ public class DeviceListActivity extends AppCompatActivity {
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
     }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-    }
-
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == DeviceDetailActivity.VIEW_REQUEST) {
+        if (requestCode == DeviceDetailActivity.NEW_REQUEST) {
             switch (resultCode) {
                 case RESULT_OK:
                     // update view
                     mAdapter.notifyDataSetChanged();
-                    super.onResume();
                     break;
                 default:
                     return;
             }
         }
+        if (requestCode == DeviceDetailActivity.VIEW_REQUEST) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    Log.d("DeviceListActivity", "VIEW_REQUEST OK");
+                    mAdapter.notifyDataSetChanged();
+
+                    break;
+                default:
+                    return;
+            }
+        }
+
         return;
     }
 
@@ -116,7 +124,8 @@ public class DeviceListActivity extends AppCompatActivity {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, DeviceDetailActivity.class);
                 intent.putExtra(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
-                context.startActivity(intent);
+                mParentActivity.startActivityForResult(intent, DeviceDetailActivity.VIEW_REQUEST);
+//                context.startActivity(intent);
             }
         };
 

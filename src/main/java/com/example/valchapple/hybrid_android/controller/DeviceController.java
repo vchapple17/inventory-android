@@ -5,8 +5,6 @@ import okhttp3.MediaType;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.valchapple.hybrid_android.activities.DeviceListActivity;
-import com.example.valchapple.hybrid_android.activities.MainActivity;
 import com.example.valchapple.hybrid_android.models.MyHttpClient;
 import com.example.valchapple.hybrid_android.models.Device;
 
