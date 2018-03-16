@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/detail_user_device_serial"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:text="SERIALNUMBER"
+        android:textAllCaps="true"
+        android:textSize="30dp"
+        android:fontFamily="serif-monospace"
+        android:textStyle="bold"
+
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:textIsSelectable="true"
+        tools:context="com.example.valchapple.hybrid_android.fragments.UserDetailFragment" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/detail_user_family"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:text="Last Name"
+            android:textIsSelectable="true"
+            tools:context="com.example.valchapple.hybrid_android.fragments.UserDetailFragment" />
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/detail_user_first"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:text="First Name"
+            android:textColor="@color/colorText"
+            android:textIsSelectable="true"
+            tools:context="com.example.valchapple.hybrid_android.fragments.UserDetailFragment" />
+    </LinearLayout>
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/detail_user_group"
+        style="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:text="CLASS_2018"
+        android:textColor="@color/colorText"
+        android:textIsSelectable="true"
+        tools:context="com.example.valchapple.hybrid_android.fragments.UserDetailFragment" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="?android:attr/textAppearanceLarge"
+        android:id="@+id/detail_user_edit_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:layout_margin="10dp"
+        android:text="@string/btn_user_detail_edit_btn"
+        android:textColor="@color/colorText"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="?android:attr/textAppearanceLarge"
+        android:id="@+id/detail_user_delete_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorDelete"
+        android:text="@string/btn_user_detail_delete_btn"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold" />
+
+</LinearLayout>

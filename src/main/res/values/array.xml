@@ -13,4 +13,13 @@
         <item>GOLD</item>
         <item>ROSE_GOLD</item>
     </string-array>
+
+    <string-array name="user_group_array">
+        <item>STAFF</item>
+        <item>CLASS_2018</item>
+        <item>CLASS_2019</item>
+        <item>CLASS_2020</item>
+        <item>CLASS_2021</item>
+    </string-array>
+
 </resources>

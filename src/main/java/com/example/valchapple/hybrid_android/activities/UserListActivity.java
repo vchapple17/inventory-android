@@ -17,23 +17,24 @@ import android.widget.TextView;
 
 import com.example.valchapple.hybrid_android.R;
 import com.example.valchapple.hybrid_android.controller.DeviceController;
-import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
-import com.example.valchapple.hybrid_android.models.Device;
+import com.example.valchapple.hybrid_android.controller.UserController;
+import com.example.valchapple.hybrid_android.fragments.UserDetailFragment;
+import com.example.valchapple.hybrid_android.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * An activity representing a list of Devices.
+ * An activity representing a list of Users.
  */
-public class DeviceListActivity extends AppCompatActivity {
-    private DeviceRecyclerViewAdapter mAdapter;
+public class UserListActivity extends AppCompatActivity {
+    private UserRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_list);
+        setContentView(R.layout.activity_user_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -48,19 +49,19 @@ public class DeviceListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DeviceListActivity.this, DeviceDetailEditActivity.class);
-                startActivityForResult(intent, DeviceDetailActivity.NEW_REQUEST);
+                Intent intent = new Intent(UserListActivity.this, UserDetailEditActivity.class);
+                startActivityForResult(intent, UserDetailActivity.NEW_REQUEST);
             }
         });
 
-        View recyclerView = findViewById(R.id.device_list);
+        View recyclerView = findViewById(R.id.user_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == DeviceDetailActivity.NEW_REQUEST) {
+        if (requestCode == UserDetailActivity.NEW_REQUEST) {
             switch (resultCode) {
                 case RESULT_OK:
                     // update view
@@ -70,11 +71,11 @@ public class DeviceListActivity extends AppCompatActivity {
                     return;
             }
         }
-        if (requestCode == DeviceDetailActivity.VIEW_REQUEST) {
+        if (requestCode == UserDetailActivity.VIEW_REQUEST) {
             switch (resultCode) {
                 case RESULT_OK:
                     // update view
-                    Log.d("DeviceListActivity", "VIEW_REQUEST OK");
+                    Log.d("UserListActivity", "VIEW_REQUEST OK");
                     mAdapter.notifyDataSetChanged();
 
                     break;
@@ -87,47 +88,53 @@ public class DeviceListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        mAdapter = new DeviceRecyclerViewAdapter(this, DeviceController.getDevices());
+        mAdapter = new UserRecyclerViewAdapter(this, UserController.getUsers());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
     }
 
-    public static class DeviceRecyclerViewAdapter
-            extends RecyclerView.Adapter<DeviceRecyclerViewAdapter.ViewHolder> {
+    public static class UserRecyclerViewAdapter
+            extends RecyclerView.Adapter<UserRecyclerViewAdapter.ViewHolder> {
 
-        private DeviceListActivity mParentActivity;
-        private List<Device> mValues = new ArrayList<>();
+        private UserListActivity mParentActivity;
+        private List<User> mValues = new ArrayList<>();
 
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Device device = (Device) view.getTag();
+                User user = (User) view.getTag();
                 Context context = view.getContext();
-                Intent intent = new Intent(context, DeviceDetailActivity.class);
-                intent.putExtra(DeviceDetailFragment.ARG_DEVICE_ID, device.id);
-                mParentActivity.startActivityForResult(intent, DeviceDetailActivity.VIEW_REQUEST);
+                Intent intent = new Intent(context, UserDetailActivity.class);
+                intent.putExtra(UserDetailFragment.ARG_USER_ID, user.id);
+                mParentActivity.startActivityForResult(intent, UserDetailActivity.VIEW_REQUEST);
             }
         };
 
-        DeviceRecyclerViewAdapter(DeviceListActivity parent,
-                                  List<Device> devices ) {
-            mValues = devices;
+        UserRecyclerViewAdapter(UserListActivity parent,
+                                  List<User> users ) {
+            mValues = users;
             mParentActivity = parent;
         }
 
         @Override
-        public DeviceRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public UserRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.device_list_content, parent, false);
+                    .inflate(R.layout.user_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-                holder.mModelView.setText(mValues.get(position).getModelText());
-                holder.mSerialView.setText(mValues.get(position).getSerialText());
-                holder.mStatusView.setText(mValues.get(position).getStatusText());
-
+                holder.mFamilyNameView.setText(mValues.get(position).family_name);
+                holder.mFirstNameView.setText(mValues.get(position).first_name);
+                holder.mGroupView.setText(mValues.get(position).group);
+                // Get Device Serial
+                String device_serial = DeviceController.getSerialById( mValues.get(position).device_id);
+                if (device_serial == null) {
+                    holder.mDeviceSerialView.setText("No Device");
+                } else {
+                    holder.mDeviceSerialView.setText(device_serial);
+                }
                 holder.itemView.setTag(mValues.get(position));
                 holder.itemView.setOnClickListener(mOnClickListener);
         }
@@ -138,15 +145,18 @@ public class DeviceListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mModelView;
-            final TextView mSerialView;
-            final TextView mStatusView;
+            final TextView mFamilyNameView;
+            final TextView mFirstNameView;
+            final TextView mGroupView;
+            final TextView mDeviceSerialView;
 
             ViewHolder(View view) {
                 super(view);
-                mModelView = view.findViewById(R.id.model_text);
-                mSerialView = view.findViewById(R.id.serial_text);
-                mStatusView = view.findViewById(R.id.status_text);
+                mFamilyNameView = view.findViewById(R.id.family_name_text);
+                mFirstNameView = view.findViewById(R.id.first_name_text);
+                mGroupView = view.findViewById(R.id.group_text);
+                mDeviceSerialView = view.findViewById(R.id.user_device_serial_text);
+
             }
         }
     }

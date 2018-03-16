@@ -1,12 +1,10 @@
 package com.example.valchapple.hybrid_android.controller;
 
-import okhttp3.MediaType;
-
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.valchapple.hybrid_android.models.MyHttpClient;
 import com.example.valchapple.hybrid_android.models.Device;
+import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,10 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -31,27 +29,15 @@ import okhttp3.Response;
 
 public class DeviceController extends AppCompatActivity {
 
-//    public DeviceController(MyHttpClient c, DeviceListActivity parent) {
-//        mParent = parent;
-//        client = c;
-//    }
-
-
     public static final Map<String, Device> DEVICE_MAP = new HashMap<String, Device>();
     public static List<Device> devices = new ArrayList<>();
     public static boolean isUpdating = false;
     public static MyHttpClient client;
-//    public static final DeviceListActivity mParent;
 
     // STATIC HELPERS
-    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
-    public static final String devicesURL = "https://hybrid-project-20180223.appspot.com/devices";
-    public static final String[] model_types = {
-            "LENOVO",
-            "IPAD_4TH",
-            "IPAD_AIR",
-            "IPAD_AIR2"
-    };
+    private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final String devicesURL = "https://hybrid-project-20180223.appspot.com/devices";
+
     public static Device readJSONDevice(JSONObject device_JSON) throws JSONException {
         Log.d("readJSONDevice", device_JSON.toString());
         String id = device_JSON.getString("id");
@@ -123,7 +109,6 @@ public class DeviceController extends AppCompatActivity {
 
 
     // GET Devices Request
-    //, final DeviceListActivity.DeviceRecyclerViewAdapter a
     public static void requestDevices() {
         isUpdating = true;
         HttpUrl url = HttpUrl.parse(devicesURL);
@@ -153,16 +138,6 @@ public class DeviceController extends AppCompatActivity {
                     }
                     sortDevicesBySerial();
                     isUpdating = false;
-//                    a.replaceDevices(devices);
-
-//                    parent.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            //Handle UI here
-//                            findViewById(R.id.loading).setVisibility(View.GONE);
-//                        }
-//                    });
-
                 } catch (JSONException e) {
                     isUpdating = false;
                     e.printStackTrace();
@@ -174,7 +149,6 @@ public class DeviceController extends AppCompatActivity {
     }
 
     // POST Device Request
-//    public boolean postDeviceDetails(MyHttpClient client, String serial, String model, String color) {
     public static boolean postDeviceDetails(String serial, String model, String color) {
         HttpUrl url = HttpUrl.parse(devicesURL);
         String postString = makePostString(model, color, serial);
@@ -194,7 +168,6 @@ public class DeviceController extends AppCompatActivity {
             JSONObject device_obj = new JSONObject(r);
             Device d = readJSONDevice(device_obj);;
             DEVICE_MAP.put(d.id, d);
-//            Device.devices.add(d);
             requestDevices();
             return true;
         } catch (IOException e) {
@@ -219,7 +192,6 @@ public class DeviceController extends AppCompatActivity {
             return false;
         }
 
-//        String device_string = devicesURL + "/" + device_id;
         String device_string = getDeviceUrlString(device_id);
         HttpUrl url = HttpUrl.parse(device_string);
 
@@ -233,22 +205,14 @@ public class DeviceController extends AppCompatActivity {
             JSONObject device_obj = new JSONObject(r);
             Device d = readJSONDevice(device_obj);;
             DEVICE_MAP.replace(d.id, d);
-//            DEVICE_MAP.put(d.id, d);
             int i = findIndexById(d.id);
             if (i == -1) {
                 return false;
             }
             devices.set(findIndexById(d.id), d);
             sortDevicesBySerial();
-//            requestDevices();
             return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return false;
-        } catch (JSONException e) {
+        }  catch (IOException | NullPointerException | JSONException e) {
             e.printStackTrace();
             return false;
         }
@@ -269,7 +233,7 @@ public class DeviceController extends AppCompatActivity {
 
         try{
             Response response = okHttp.newCall(request).execute();
-            // verify device was delete
+            // verify device was deleted
             if (response.code() == 204) {
                 // Success
                 requestDevices();
@@ -280,10 +244,7 @@ public class DeviceController extends AppCompatActivity {
                 return false;
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } catch (NullPointerException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             return false;
         }
@@ -298,5 +259,15 @@ public class DeviceController extends AppCompatActivity {
             }
         }
         return -1;
+    }
+
+    public static String getSerialById(String device_id) {
+        int i = 0;
+        for (i = 0; i < devices.size(); i++ ) {
+            if (devices.get(i).id.equals(device_id)) {
+                return devices.get(i).getSerialText();
+            }
+        }
+        return null;
     }
 }

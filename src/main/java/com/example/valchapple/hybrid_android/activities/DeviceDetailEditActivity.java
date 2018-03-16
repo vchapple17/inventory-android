@@ -1,9 +1,9 @@
 package com.example.valchapple.hybrid_android.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,7 +16,6 @@ import com.example.valchapple.hybrid_android.R;
 import com.example.valchapple.hybrid_android.controller.DeviceController;
 import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.models.Device;
-import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
 public class DeviceDetailEditActivity extends AppCompatActivity {
 
@@ -84,7 +83,7 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
         mSaveButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("mSaveButton", ".setOnClickListener");
+                Log.d("mSaveButton Device", ".setOnClickListener");
                 if (saveDeviceDetails()) {
                     // Save Success
                     int duration = Toast.LENGTH_SHORT;
@@ -92,7 +91,6 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(DeviceDetailEditActivity.this, text, duration);
                     toast.show();
                     Intent returnIntent = new Intent();
-//                    returnIntent.putExtra("update", true);
                     setResult(RESULT_OK,returnIntent);
                     finish();
                 }
@@ -103,7 +101,6 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(DeviceDetailEditActivity.this, text, duration);
                     toast.show();
                     setResult(RESULT_CANCELED);
-//                    finish();
                 }
             }
 
@@ -111,8 +108,6 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
     }
 
     private boolean saveDeviceDetails() {
-        // Return 1 for successful save
-        // Return 0 for failed save
         String serial;
         String model;
         String color;

@@ -4,14 +4,10 @@
     <string name="home_btn_devices">Devices</string>
     <string name="home_btn_checkin">Check In</string>
     <string name="home_btn_checkout">Check Out</string>
+
     <string name="title_device_list">Devices</string>
     <string name="title_device_detail">Device Detail</string>
-    <string name="title_device_detail_edit">Add/Edit Device Instructions</string>
-    <string name="label_first_name">First:</string>
-    <string name="hint_first_name">First Name</string>
-    <string name="label_family_name">Last:</string>
-    <string name="hint_family_name">Last Name</string>
-    <string name="label_group">Group:</string>
+    <string name="title_device_detail_edit">Add/Edit Device</string>
     <string name="label_device_serial">Serial: </string>
     <string name="hint_device_serial">Serial Number</string>
     <string name="label_device_model">Model: </string>
@@ -19,4 +15,18 @@
     <string name="label_device_save">Save Device</string>
     <string name="btn_device_detail_edit_btn">Edit Device</string>
     <string name="btn_device_detail_delete_btn">Delete Device</string>
+
+    <string name="title_user_list">Users</string>
+    <string name="title_user_detail">User Detail</string>
+    <string name="title_user_detail_edit">Add/Edit User</string>
+    <string name="label_first_name">First:</string>
+    <string name="hint_first_name">First Name</string>
+    <string name="label_family_name">Last:</string>
+    <string name="hint_family_name">Last Name</string>
+    <string name="label_group">Group:</string>
+
+    <string name="label_user_save">Save User</string>
+    <string name="btn_user_detail_edit_btn">Edit User</string>
+    <string name="btn_user_detail_delete_btn">Delete User</string>
+
 </resources>

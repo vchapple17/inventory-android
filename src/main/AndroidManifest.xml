@@ -25,6 +25,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.valchapple.hybrid_android.activities.MainActivity" />
+
         <activity
             android:name=".activities.DeviceDetailActivity"
             android:label="@string/title_device_detail"
@@ -41,7 +42,32 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.valchapple.hybrid_android.activities.DeviceListActivity" />
+        </activity>
+        <activity
+            android:name=".activities.UserListActivity"
+            android:label="@string/title_user_list"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.valchapple.hybrid_android.activities.MainActivity" />
 
+        <activity
+            android:name=".activities.UserDetailActivity"
+            android:label="@string/title_user_detail"
+            android:parentActivityName=".activities.UserListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.valchapple.hybrid_android.activities.UserListActivity" />
+        </activity>
+        <activity
+            android:name=".activities.UserDetailEditActivity"
+            android:label="@string/title_user_detail_edit"
+            android:parentActivityName=".activities.DeviceListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.valchapple.hybrid_android.activities.UserListActivity" />
         </activity>
     </application>
 
