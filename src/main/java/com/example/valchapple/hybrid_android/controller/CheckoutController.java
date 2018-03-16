@@ -14,6 +14,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+// TODO Update Views to show start date for device checkout
+// TODO Disable Delete button when User has device
+// TODO Disable Delete button when Device is rented
+// TODO Implement Check in button when User returns device
+
 public class CheckoutController extends AppCompatActivity {
     public static MyHttpClient client;
 
@@ -26,7 +31,6 @@ public class CheckoutController extends AppCompatActivity {
     }
 
     // PUT a DEVICE to a USER
-    // TODO Device gets checked out but user is not updated on server. Check server
     public static boolean checkoutDevice(String user_id, String device_id) {
         if ((user_id == null) || (user_id.length() < 1)) {
             return false;
@@ -48,10 +52,7 @@ public class CheckoutController extends AppCompatActivity {
                     User u = UserController.users.get(i);
                     u.device_id = device_id;
                     UserController.requestUsers();
-                    // TODO update local user array with correct start_date
-//                    u.start_date = null;
                     assert (UserController.users.get(i).device_id != null);
-//                    assert (UserController.users.get(i).start_date != null);
                 }
                 User u = UserController.USER_MAP.get(user_id);
                 if (u != null) {
@@ -59,7 +60,6 @@ public class CheckoutController extends AppCompatActivity {
 //                    u.start_date = null;
                     // TODO update local user hash with correct start_date
                     assert (UserController.USER_MAP.get(user_id).device_id == null);
-//                    assert (UserController.USER_MAP.get(user_id).start_date != null);
                 }
                 UserController.requestUsers();
                 DeviceController.requestDevices();
