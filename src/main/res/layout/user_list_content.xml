@@ -56,7 +56,7 @@
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
             android:layout_marginBottom="@dimen/text_margin"
-            android:text="serialNUmbr"
+            android:text="@string/user_no_device"
             android:gravity="right"
             android:textStyle="italic"
             android:textColor="@color/colorAccent"

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/group_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_margin"
+        android:layout_marginRight="@dimen/text_margin"
+        android:layout_marginBottom="@dimen/text_margin"
+        android:text="CLASS_2018"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="italic"
+        android:textAppearance="?attr/textAppearanceListItem"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.valchapple.hybrid_android.fragments.CheckoutFragment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        >
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/label_device"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:context="com.example.valchapple.hybrid_android.fragments.CheckoutFragment" />
+        <Spinner
+            android:id="@+id/checkout_device_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:context="com.example.valchapple.hybrid_android.fragments.CheckoutFragment" />
+    </LinearLayout>
+
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        style="?android:attr/textAppearanceLarge"
+        android:id="@+id/device_checkout_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:layout_margin="10dp"
+        android:text="@string/btn_checkout"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.valchapple.hybrid_android.fragments.CheckoutFragment" />
+
+</LinearLayout>

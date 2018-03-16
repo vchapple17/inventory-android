@@ -42,7 +42,7 @@
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/detail_user_first"
-            style="?android:attr/textAppearanceMedium"
+            style="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="16dp"
@@ -65,7 +65,21 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        android:layout_height="20dp" />
+
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="?android:attr/textAppearanceLarge"
+        android:id="@+id/detail_user_checkout_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:layout_margin="10dp"
+        android:enabled="true"
+        android:text="@string/btn_checkout"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold" />
 
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -75,13 +89,12 @@
         android:layout_height="match_parent"
         android:padding="20dp"
         android:layout_margin="10dp"
-        android:text="@string/btn_user_detail_edit_btn"
-        android:textColor="@color/colorText"
+        android:text="@string/btn_user_detail_edit"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWhite"
         android:textStyle="bold" />
+        />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
 
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -92,7 +105,7 @@
         android:padding="20dp"
         android:layout_margin="10dp"
         android:background="@color/colorDelete"
-        android:text="@string/btn_user_detail_delete_btn"
+        android:text="@string/btn_user_detail_delete"
         android:textColor="@color/colorWhite"
         android:textStyle="bold" />
 

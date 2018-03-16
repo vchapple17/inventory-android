@@ -2,8 +2,8 @@ package com.example.valchapple.hybrid_android.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,11 +14,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.activities.DeviceDetailActivity;
 import com.example.valchapple.hybrid_android.activities.DeviceDetailEditActivity;
+import com.example.valchapple.hybrid_android.activities.DeviceListActivity;
 import com.example.valchapple.hybrid_android.controller.DeviceController;
 import com.example.valchapple.hybrid_android.models.Device;
-import com.example.valchapple.hybrid_android.activities.DeviceListActivity;
-import com.example.valchapple.hybrid_android.activities.DeviceDetailActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -53,10 +53,6 @@ public class DeviceDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_DEVICE_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-//            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_DEVICE_ID));
             mItem = DeviceController.DEVICE_MAP.get(getArguments().getString(ARG_DEVICE_ID));
 
             if (mItem == null) {

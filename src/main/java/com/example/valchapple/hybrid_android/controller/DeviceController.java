@@ -270,4 +270,25 @@ public class DeviceController extends AppCompatActivity {
         }
         return null;
     }
+
+    public static List<String> getAvailableDeviceModelSerial() {
+        List<String> available_devices = new ArrayList<>();
+
+        for (int i = 0; i < devices.size(); i++) {
+            if (devices.get(i).is_rented == false) {
+                available_devices.add(devices.get(i).model + " (" + devices.get(i).serial + ")");
+            }
+        }
+        return available_devices;
+    }
+
+    public static List<Device> getAvailableDevices() {
+        List<Device> available_devices = new ArrayList<>();
+
+        for (int i = 0; i < devices.size(); i++) {
+            if (devices.get(i).is_rented == false) { available_devices.add(devices.get(i)); }
+        }
+        return available_devices;
+    }
+
 }

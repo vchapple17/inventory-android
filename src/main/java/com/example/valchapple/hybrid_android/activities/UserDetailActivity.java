@@ -92,6 +92,26 @@ public class UserDetailActivity extends AppCompatActivity {
                 default:
                     return;
             }
+        } else if (requestCode == CheckoutActivity.CHECK_OUT) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    Log.d("CHECK_OUT", "UserDetailActivity");
+                    onResumeFragments();
+                    break;
+                default:
+                    return;
+            }
+        } else if (requestCode == CheckoutActivity.CHECK_IN) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    Log.d("CHECK_IN", "UserDetailActivity");
+                    onResumeFragments();
+                    break;
+                default:
+                    return;
+            }
         }
     }
 
