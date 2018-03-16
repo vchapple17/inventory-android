@@ -148,10 +148,15 @@ public class CheckoutFragment extends Fragment {
             if (device.length() < 1) {
                 return false;
             }
-            return mItem.checkoutDevice(device);
+            String device_id = DeviceController.getIdFromModelSerialString(device);
+            if (device_id == null) {
+                return false;
+            }
+            return mItem.checkoutDevice(device_id);
         }
         catch (NullPointerException e) {
             return false;
         }
     }
+
 }

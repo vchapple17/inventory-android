@@ -271,17 +271,6 @@ public class DeviceController extends AppCompatActivity {
         return null;
     }
 
-    public static List<String> getAvailableDeviceModelSerial() {
-        List<String> available_devices = new ArrayList<>();
-
-        for (int i = 0; i < devices.size(); i++) {
-            if (devices.get(i).is_rented == false) {
-                available_devices.add(devices.get(i).model + " (" + devices.get(i).serial + ")");
-            }
-        }
-        return available_devices;
-    }
-
     public static List<Device> getAvailableDevices() {
         List<Device> available_devices = new ArrayList<>();
 
@@ -289,6 +278,31 @@ public class DeviceController extends AppCompatActivity {
             if (devices.get(i).is_rented == false) { available_devices.add(devices.get(i)); }
         }
         return available_devices;
+    }
+
+    public static List<String> getAvailableDeviceModelSerial() {
+        List<String> available_devices = new ArrayList<>();
+
+        for (int i = 0; i < devices.size(); i++) {
+            if (devices.get(i).is_rented == false) {
+                available_devices.add(getDeviceModelSerialString(devices.get(i).id));
+            }
+        }
+        return available_devices;
+    }
+
+    private static String getDeviceModelSerialString( String device_id ) {
+        return DEVICE_MAP.get(device_id).model + ": " + DEVICE_MAP.get(device_id).serial;
+    }
+
+    public static String getIdFromModelSerialString( String model_serial) {
+        for (int i = 0; i < devices.size(); i++) {
+            String tmp = getDeviceModelSerialString(devices.get(i).id);
+            if (model_serial.equals(tmp)) {
+                return devices.get(i).id;
+            }
+        }
+        return null;
     }
 
 }

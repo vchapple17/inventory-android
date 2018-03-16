@@ -26,6 +26,7 @@ public class CheckoutController extends AppCompatActivity {
     }
 
     // PUT a DEVICE to a USER
+    // TODO Device gets checked out but user is not updated on server. Check server
     public static boolean checkoutDevice(String user_id, String device_id) {
         if ((user_id == null) || (user_id.length() < 1)) {
             return false;
@@ -46,6 +47,7 @@ public class CheckoutController extends AppCompatActivity {
                 if (i != -1) {
                     User u = UserController.users.get(i);
                     u.device_id = device_id;
+                    UserController.requestUsers();
                     // TODO update local user array with correct start_date
 //                    u.start_date = null;
                     assert (UserController.users.get(i).device_id != null);
@@ -59,6 +61,8 @@ public class CheckoutController extends AppCompatActivity {
                     assert (UserController.USER_MAP.get(user_id).device_id == null);
 //                    assert (UserController.USER_MAP.get(user_id).start_date != null);
                 }
+                UserController.requestUsers();
+                DeviceController.requestDevices();
                 return true;
             }
             return false;
