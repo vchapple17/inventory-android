@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.controller.DeviceController;
 import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.models.Device;
 import com.example.valchapple.hybrid_android.models.MyHttpClient;
@@ -59,7 +60,7 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
             if (intent.getExtras() != null) {
                 device_id = intent.getStringExtra(DeviceDetailFragment.ARG_DEVICE_ID);
                 if (device_id != null) {
-                    Device d = Device.DEVICE_MAP.get(device_id);
+                    Device d = DeviceController.DEVICE_MAP.get(device_id);
                     String device_serial = d.getSerialText();
                     String device_model = d.getModelText();
                     String device_color = d.getColorText();
@@ -101,7 +102,6 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
                     CharSequence text = "Failed to save";
                     Toast toast = Toast.makeText(DeviceDetailEditActivity.this, text, duration);
                     toast.show();
-//                    Intent returnIntent = new Intent();
                     setResult(RESULT_CANCELED);
 //                    finish();
                 }
@@ -139,17 +139,16 @@ public class DeviceDetailEditActivity extends AppCompatActivity {
             return false;
         }
 
-        MyHttpClient client = (MyHttpClient)getApplicationContext();
         // If device_id is null, create new Device, else PATCH
         if (this.device_id == null) {
             // Create new device
             Log.d("saveDeviceDetails", "post");
-            return Device.postDeviceDetails(client, serial, model, color);
+            return DeviceController.postDeviceDetails(serial, model, color);
         }
         else {
             // Save Existing device
             Log.d("saveDeviceDetails", "patch");
-            return Device.patchDeviceDetails(client, device_id, serial, model, color);
+            return DeviceController.patchDeviceDetails(device_id, serial, model, color);
         }
     }
 

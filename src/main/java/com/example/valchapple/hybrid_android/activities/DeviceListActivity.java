@@ -1,5 +1,6 @@
 package com.example.valchapple.hybrid_android.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.controller.DeviceController;
 import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
 import com.example.valchapple.hybrid_android.models.Device;
 
@@ -36,8 +38,9 @@ public class DeviceListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
+//    private boolean mTwoPane;
     private DeviceRecyclerViewAdapter mAdapter;
+    private boolean isUpdating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +61,13 @@ public class DeviceListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DeviceListActivity.this, DeviceDetailEditActivity.class);
-                startActivity(intent);
-
+                startActivityForResult(intent, DeviceDetailActivity.VIEW_REQUEST);
             }
         });
 
-        if (findViewById(R.id.device_detail_container) != null) {
-            mTwoPane = true;
-        }
+//        if (findViewById(R.id.device_detail_container) != null) {
+//            mTwoPane = true;
+//        }
 
         View recyclerView = findViewById(R.id.device_list);
         assert recyclerView != null;
@@ -75,21 +77,37 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == DeviceDetailActivity.VIEW_REQUEST) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    mAdapter.notifyDataSetChanged();
+                    super.onResume();
+                    break;
+                default:
+                    return;
+            }
+        }
+        return;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        mAdapter = new DeviceRecyclerViewAdapter(this, Device.getDevices(), mTwoPane);
+        mAdapter = new DeviceRecyclerViewAdapter(this, DeviceController.getDevices());
+        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
     }
-
 
     public static class DeviceRecyclerViewAdapter
             extends RecyclerView.Adapter<DeviceRecyclerViewAdapter.ViewHolder> {
 
         private DeviceListActivity mParentActivity;
         private List<Device> mValues = new ArrayList<>();
-        private boolean mTwoPane;
+//        private boolean mTwoPane;
 
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
@@ -103,11 +121,13 @@ public class DeviceListActivity extends AppCompatActivity {
         };
 
         DeviceRecyclerViewAdapter(DeviceListActivity parent,
-                                      List<Device> devices,
-                                      boolean twoPane) {
+                                  List<Device> devices ) {
+//        DeviceRecyclerViewAdapter(DeviceListActivity parent,
+//                                      List<Device> devices,
+//                                      boolean twoPane) {
             mValues = devices;
             mParentActivity = parent;
-            mTwoPane = twoPane;
+//            mTwoPane = twoPane;
         }
 
         @Override
@@ -119,12 +139,19 @@ public class DeviceListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mModelView.setText(mValues.get(position).getModelText());
-            holder.mSerialView.setText(mValues.get(position).getSerialText());
-            holder.mStatusView.setText(mValues.get(position).getStatusText());
+            if (DeviceController.isUpdating == false) {
+                holder.mModelView.setText(mValues.get(position).getModelText());
+                holder.mSerialView.setText(mValues.get(position).getSerialText());
+                holder.mStatusView.setText(mValues.get(position).getStatusText());
 
-            holder.itemView.setTag(mValues.get(position));
-            holder.itemView.setOnClickListener(mOnClickListener);
+                holder.itemView.setTag(mValues.get(position));
+                holder.itemView.setOnClickListener(mOnClickListener);
+            } else {
+                holder.mModelView.setText("");
+                holder.mSerialView.setText("");
+                holder.mStatusView.setText("");
+            }
+
         }
 
         @Override
@@ -139,9 +166,9 @@ public class DeviceListActivity extends AppCompatActivity {
 
             ViewHolder(View view) {
                 super(view);
-                mModelView = (TextView) view.findViewById(R.id.model_text);
-                mSerialView = (TextView) view.findViewById(R.id.serial_text);
-                mStatusView = (TextView) view.findViewById(R.id.status_text);
+                mModelView = view.findViewById(R.id.model_text);
+                mSerialView = view.findViewById(R.id.serial_text);
+                mStatusView = view.findViewById(R.id.status_text);
             }
         }
     }

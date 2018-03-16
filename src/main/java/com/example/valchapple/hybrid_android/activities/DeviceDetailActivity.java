@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.valchapple.hybrid_android.fragments.DeviceDetailFragment;
@@ -21,6 +22,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
     public static final int EDIT_REQUEST = 1;
     public static final int NEW_REQUEST = 2;
+    public static final int VIEW_REQUEST = 3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +60,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onResumeFragments() {
+        super.onResumeFragments();
         android.support.v4.app.Fragment currentFragment = this.getSupportFragmentManager().findFragmentById(R.id.device_detail_container);
         if (currentFragment instanceof DeviceDetailFragment) {
             android.support.v4.app.FragmentTransaction fragTransaction =   this.getSupportFragmentManager().beginTransaction();
@@ -67,15 +69,18 @@ public class DeviceDetailActivity extends AppCompatActivity {
             fragTransaction.attach(currentFragment);
             fragTransaction.commit();
         }
+
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDIT_REQUEST) {
             switch (resultCode) {
                 case RESULT_OK:
+                    Log.d("EDIT_REQUEST", "DeviceDetailActivity");
                     // update view
-                    super.onResume();
+                    onResumeFragments();
                     break;
                 default:
                     return;
@@ -84,7 +89,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
             switch (resultCode) {
                 case RESULT_OK:
                     // update view
-                    onResume();
+                    Log.d("NEW_REQUEST", "DeviceDetailActivity");
+                    onResumeFragments();
                     break;
                 default:
                     return;

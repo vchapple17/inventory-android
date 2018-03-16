@@ -6,6 +6,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,12 @@ import android.widget.TextView;
 
 import com.example.valchapple.hybrid_android.R;
 import com.example.valchapple.hybrid_android.activities.DeviceDetailEditActivity;
+import com.example.valchapple.hybrid_android.controller.DeviceController;
 import com.example.valchapple.hybrid_android.models.Device;
 import com.example.valchapple.hybrid_android.activities.DeviceListActivity;
 import com.example.valchapple.hybrid_android.activities.DeviceDetailActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A fragment representing a single Device detail screen.
@@ -53,8 +57,16 @@ public class DeviceDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
 //            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_DEVICE_ID));
-            mItem = Device.DEVICE_MAP.get(getArguments().getString(ARG_DEVICE_ID));
+            mItem = DeviceController.DEVICE_MAP.get(getArguments().getString(ARG_DEVICE_ID));
 
+            if (mItem == null) {
+                Log.d("DeviceDetailFragment", "mItem null");
+                getActivity().finish();
+                return;
+            }
+            else {
+                Log.d("DeviceDetailFragment", mItem.toString());
+            }
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
@@ -66,7 +78,7 @@ public class DeviceDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (getArguments().containsKey(ARG_DEVICE_ID)) {
-            mItem = Device.DEVICE_MAP.get(getArguments().getString(ARG_DEVICE_ID));
+            mItem = DeviceController.DEVICE_MAP.get(getArguments().getString(ARG_DEVICE_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
@@ -93,8 +105,6 @@ public class DeviceDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Activity context = getActivity();
-//                Snackbar.make(view, "Edit Device", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 Intent intent = new Intent(context, DeviceDetailEditActivity.class);
                 intent.putExtra(ARG_DEVICE_ID, getArguments().getString(ARG_DEVICE_ID));
                 context.startActivityForResult(intent, DeviceDetailActivity.EDIT_REQUEST);
@@ -106,12 +116,20 @@ public class DeviceDetailFragment extends Fragment {
         delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Activity context = getActivity();
-                Snackbar.make(view, "Delete Device", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-//                Intent intent = new Intent(context, DeviceDetailEditActivity.class);
-//                intent.putExtra(ARG_DEVICE_ID, getArguments().getString(ARG_DEVICE_ID));
-//                context.startActivityForResult(intent, DeviceDetailActivity.EDIT_REQUEST);
+
+                // Delete Device and Return
+                boolean result = DeviceController.deleteDevice(getArguments().getString(ARG_DEVICE_ID));
+
+                if (result == true) {
+                    Snackbar.make(view, "Device deleted.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    getActivity().setResult(RESULT_OK);
+                    getActivity().finish();
+                }
+                else {
+                    Snackbar.make(view, "Device not deleted.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 

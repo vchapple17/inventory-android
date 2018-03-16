@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.controller.DeviceController;
 import com.example.valchapple.hybrid_android.models.Device;
 import com.example.valchapple.hybrid_android.models.MyHttpClient;
 
@@ -26,9 +27,8 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         // INSTANCE
 
-
-        MyHttpClient client = (MyHttpClient)getApplicationContext();
-        Device.requestDevices(client);
+        DeviceController.client = (MyHttpClient)getApplicationContext();
+        DeviceController.requestDevices();
 
         // Add buttons
         Button devicesBtn = findViewById(R.id.btn_devices);
