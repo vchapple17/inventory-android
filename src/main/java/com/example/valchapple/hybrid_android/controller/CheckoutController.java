@@ -15,8 +15,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 // TODO Update Views to show start date for device checkout
-// TODO Disable Delete button when User has device
-// TODO Disable Delete button when Device is rented
 // TODO Implement Check in button when User returns device
 
 public class CheckoutController extends AppCompatActivity {

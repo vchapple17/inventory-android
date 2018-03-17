@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.valchapple.hybrid_android.R;
 import com.example.valchapple.hybrid_android.activities.DeviceDetailActivity;
@@ -109,25 +110,40 @@ public class DeviceDetailFragment extends Fragment {
 
         // Add Delete Button
         Button delete_btn = rootView.findViewById(R.id.detail_device_delete_button);
-        delete_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // Delete Device and Return
-                boolean result = DeviceController.deleteDevice(getArguments().getString(ARG_DEVICE_ID));
-
-                if (result == true) {
-                    Snackbar.make(view, "Device deleted.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    getActivity().setResult(RESULT_OK);
-                    getActivity().finish();
+        if (mItem.is_rented) {
+            delete_btn.setBackgroundColor(getResources()
+                    .getColor(R.color.colorDisabled, getContext().getTheme()));
+            delete_btn.setTextColor(getResources()
+                    .getColor(R.color.colorTextDisabled, getContext().getTheme()));
+            delete_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int duration = Toast.LENGTH_SHORT;
+                    CharSequence text = "Must return device first.";
+                    Toast toast = Toast.makeText(getContext(), text, duration);
+                    toast.show();
                 }
-                else {
-                    Snackbar.make(view, "Device not deleted.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+            });
+        } else {
+            delete_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // Delete Device and Return
+                    boolean result = DeviceController.deleteDevice(getArguments().getString(ARG_DEVICE_ID));
+
+                    if (result == true) {
+                        Snackbar.make(view, "Device deleted.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        getActivity().setResult(RESULT_OK);
+                        getActivity().finish();
+                    } else {
+                        Snackbar.make(view, "Device not deleted.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         return rootView;
     }
