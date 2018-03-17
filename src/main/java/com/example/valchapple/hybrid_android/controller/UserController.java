@@ -50,7 +50,12 @@ public class UserController extends AppCompatActivity {
         String group = user_JSON.getString("group");
         String device_id = user_JSON.getString("device_id");
         String start_datetime = user_JSON.getString("start_datetime");
-
+        if (device_id.equals("null")) {
+            device_id = null;
+        }
+        if (start_datetime.equals("null")) {
+            start_datetime = null;
+        }
         return new User(id, first_name, family_name, group, device_id, start_datetime);
     }
     private static String _makePostString(String first_name, String family_name, String group) {

@@ -106,7 +106,11 @@ public class UserDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.detail_user_first)).setText(mItem.first_name);
             ((TextView) rootView.findViewById(R.id.detail_user_family)).setText(mItem.family_name);
             ((TextView) rootView.findViewById(R.id.detail_user_group)).setText(mItem.group);
-
+            if (mItem.start_date != null) {
+                ((TextView) rootView.findViewById(R.id.detail_user_device_date)).setText(mItem.start_date);
+            } else {
+                ((TextView) rootView.findViewById(R.id.detail_user_device_date)).setText("");
+            }
 
             // BUTTONS
             Button rent_btn = rootView.findViewById(R.id.detail_user_checkout_button);
