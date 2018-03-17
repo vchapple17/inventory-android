@@ -120,8 +120,34 @@ public class UserDetailFragment extends Fragment {
                 rent_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Activity context = getActivity();
+                        //                        Activity context = getActivity();
                         Log.d("CHECK-IN BUTTON", "CHECK-IN DEVICE");
+                        if (checkinDeviceSuccess()) {
+                            // Save Success
+                            int duration = Toast.LENGTH_LONG;
+                            CharSequence text = "Device Checked In";
+                            Toast toast = Toast.makeText(getContext(), text, duration);
+                            toast.show();
+                            // Update Local versions
+                            int index = DeviceController.findIndexById(mItem.device_id);
+                            DeviceController.devices.get(index).is_rented = false;
+                            DeviceController.DEVICE_MAP.get(mItem.device_id).is_rented = false;
+                            index = UserController.findIndexById(mItem.id);
+                            UserController.users.get(index).start_date = null;
+                            UserController.users.get(index).device_id = null;
+                            UserController.USER_MAP.get(mItem.id).start_date = null;
+                            UserController.USER_MAP.get(mItem.id).device_id = null;
+//                            RefreshView
+//                            mItem.device_id = null;
+//                            mItem.start_date = null;
+                        } else {
+                            // Save Failed
+                            int duration = Toast.LENGTH_LONG;
+                            CharSequence text = "Failed to check-in device";
+                            Toast toast = Toast.makeText(getContext(), text, duration);
+                            toast.show();
+//                            getActivity().setResult(RESULT_CANCELED);
+                        }
                     }
                 });
             } else {
@@ -188,6 +214,22 @@ public class UserDetailFragment extends Fragment {
             }
         }
         return rootView;
+    }
+
+    private boolean checkinDeviceSuccess() {
+        String device_id;
+        Log.d("checkinDeviceSuccess", "checkinDeviceSuccess");
+        // Collect Data From Form
+        try {
+            device_id = mItem.device_id;
+            if (device_id == null) {
+                return false;
+            }
+            return mItem.checkinDevice(device_id);
+        }
+        catch (NullPointerException e) {
+            return false;
+        }
     }
 
 }

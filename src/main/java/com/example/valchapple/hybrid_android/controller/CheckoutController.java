@@ -14,8 +14,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-// TODO Update Views to show start date for device checkout
-// TODO Implement Check in button when User returns device
+// TODO Implement Check in button - Update View
+// TODO checkinDevice update start_datetime?
 
 public class CheckoutController extends AppCompatActivity {
     public static MyHttpClient client;
@@ -55,8 +55,6 @@ public class CheckoutController extends AppCompatActivity {
                 User u = UserController.USER_MAP.get(user_id);
                 if (u != null) {
                     u.device_id = device_id;
-//                    u.start_date = null;
-                    // TODO update local user hash with correct start_date
                     assert (UserController.USER_MAP.get(user_id).device_id == null);
                 }
                 UserController.requestUsers();
@@ -91,7 +89,6 @@ public class CheckoutController extends AppCompatActivity {
             if (response.code() == 204) {
                 // Success
                 // Update User Info
-                // TODO check user is saved in
                 int i = UserController.findIndexById(user_id);
                 if (i != -1) {
                     User u = UserController.users.get(i);
