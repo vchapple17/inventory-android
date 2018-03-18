@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.activities.CheckoutActivity;
 import com.example.valchapple.hybrid_android.activities.UserDetailActivity;
 import com.example.valchapple.hybrid_android.activities.UserDetailEditActivity;
 import com.example.valchapple.hybrid_android.activities.UserListActivity;
@@ -22,6 +24,8 @@ import com.example.valchapple.hybrid_android.controller.UserController;
 import com.example.valchapple.hybrid_android.models.User;
 
 import static android.app.Activity.RESULT_OK;
+
+// TODO Refactor deleteBtn clickListener to check status to avoid repeat assignments of onClickListenter Code
 
 /**
  * A fragment representing a single User detail screen.
@@ -74,9 +78,10 @@ public class UserDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         if (getArguments().containsKey(ARG_USER_ID)) {
             mItem = UserController.USER_MAP.get(getArguments().getString(ARG_USER_ID));
-
+            Log.d("OnResume", "user fragment");
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
@@ -85,56 +90,201 @@ public class UserDetailFragment extends Fragment {
         }
     }
 
+    private void updateViewsOnDeviceCheckIn() {
+        if (getArguments().containsKey(ARG_USER_ID)) {
+            mItem = UserController.USER_MAP.get(getArguments().getString(ARG_USER_ID));
+            // Setup Detail as long as item is not null
+            if (mItem != null) {
+
+                // DETAILS
+                boolean hasDevice = true;
+                String serial = DeviceController.getSerialById(mItem.device_id);
+                if (serial == null) {
+                    hasDevice = false;
+                    serial = getString(R.string.user_no_device);
+                }
+                ((TextView) getView().findViewById(R.id.detail_user_device_serial)).setText(serial);
+                ((TextView) getView().findViewById(R.id.detail_user_first)).setText(mItem.first_name);
+                ((TextView) getView().findViewById(R.id.detail_user_family)).setText(mItem.family_name);
+                ((TextView) getView().findViewById(R.id.detail_user_group)).setText(mItem.group);
+                if (mItem.start_date != null) {
+                    ((TextView) getView().findViewById(R.id.detail_user_device_date)).setText(mItem.start_date);
+                } else {
+                    ((TextView) getView().findViewById(R.id.detail_user_device_date)).setText("");
+                }
+
+                Button rent_btn = getView().findViewById(R.id.detail_user_checkout_button);
+                // CHECK OUT DEVICE BUTTON
+                rent_btn.setText(getString(R.string.btn_checkout));
+
+                rent_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Activity context = getActivity();
+                        Intent intent = new Intent(context, CheckoutActivity.class);
+                        intent.putExtra(ARG_USER_ID, getArguments().getString(ARG_USER_ID));
+                        context.startActivityForResult(intent, CheckoutActivity.CHECK_OUT);
+                    }
+                });
+            }
+            Button delete_btn = getView().findViewById(R.id.detail_user_delete_button);
+            delete_btn.setBackgroundColor(getResources()
+                    .getColor(R.color.colorDelete, getContext().getTheme()));
+            delete_btn.setTextColor(getResources()
+                    .getColor(R.color.colorWhite, getContext().getTheme()));
+
+            delete_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Delete User and Return
+                    boolean result = UserController.deleteUser(getArguments().getString(ARG_USER_ID));
+
+                    if (result == true) {
+                        Snackbar.make(view, "User deleted.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        getActivity().setResult(RESULT_OK);
+                        getActivity().finish();
+                    }
+                    else {
+                        Snackbar.make(view, "User not deleted.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }
+            });
+
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.user_detail, container, false);
+        final View rootView = inflater.inflate(R.layout.user_detail, container, false);
 
+        // Setup Detail as long as item is not null
         if (mItem != null) {
+
+            // DETAILS
+            boolean hasDevice = true;
             String serial = DeviceController.getSerialById(mItem.device_id);
-            if (serial != null) {
-                ((TextView) rootView.findViewById(R.id.detail_user_device_serial)).setText(serial);
+            if (serial == null) {
+                hasDevice = false;
+                serial = getString(R.string.user_no_device);
             }
+            ((TextView) rootView.findViewById(R.id.detail_user_device_serial)).setText(serial);
             ((TextView) rootView.findViewById(R.id.detail_user_first)).setText(mItem.first_name);
             ((TextView) rootView.findViewById(R.id.detail_user_family)).setText(mItem.family_name);
             ((TextView) rootView.findViewById(R.id.detail_user_group)).setText(mItem.group);
+            if (mItem.start_date != null) {
+                ((TextView) rootView.findViewById(R.id.detail_user_device_date)).setText(mItem.start_date);
+            } else {
+                ((TextView) rootView.findViewById(R.id.detail_user_device_date)).setText("");
+            }
+
+            // BUTTONS
+            Button rent_btn = rootView.findViewById(R.id.detail_user_checkout_button);
+            if (hasDevice) {
+                // CHECK IN DEVICE
+                rent_btn.setText(getString(R.string.btn_checkin));
+                rent_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //                        Activity context = getActivity();
+                        Log.d("CHECK-IN BUTTON", "CHECK-IN DEVICE");
+                        if (checkinDeviceSuccess()) {
+                            // Save Success
+                            int duration = Toast.LENGTH_LONG;
+                            CharSequence text = "Device Checked In";
+                            Toast toast = Toast.makeText(getContext(), text, duration);
+                            toast.show();
+                            updateViewsOnDeviceCheckIn();
+                        } else {
+                            // Save Failed
+                            int duration = Toast.LENGTH_LONG;
+                            CharSequence text = "Failed to check-in device";
+                            Toast toast = Toast.makeText(getContext(), text, duration);
+                            toast.show();
+                        }
+                    }
+                });
+            } else {
+                // CHECK OUT DEVICE
+                rent_btn.setText(getString(R.string.btn_checkout));
+                rent_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Activity context = getActivity();
+                        Intent intent = new Intent(context, CheckoutActivity.class);
+                        intent.putExtra(ARG_USER_ID, getArguments().getString(ARG_USER_ID));
+                        context.startActivityForResult(intent, CheckoutActivity.CHECK_OUT);
+                    }
+                });
+            }
+
+            // Add Edit button
+            Button edit_btn = rootView.findViewById(R.id.detail_user_edit_button);
+            edit_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Activity context = getActivity();
+                    Intent intent = new Intent(context, UserDetailEditActivity.class);
+                    intent.putExtra(ARG_USER_ID, getArguments().getString(ARG_USER_ID));
+                    context.startActivityForResult(intent, UserDetailActivity.EDIT_REQUEST);
+                }
+            });
+
+            // Add Delete Button
+            Button delete_btn = rootView.findViewById(R.id.detail_user_delete_button);
+            if (hasDevice) {
+                delete_btn.setBackgroundColor(getResources()
+                        .getColor(R.color.colorDisabled, getContext().getTheme()));
+                delete_btn.setTextColor(getResources()
+                        .getColor(R.color.colorTextDisabled, getContext().getTheme()));
+                delete_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int duration = Toast.LENGTH_SHORT;
+                        CharSequence text = "Must return device first.";
+                        Toast toast = Toast.makeText(getContext(), text, duration);
+                        toast.show();
+                    }
+                });
+            } else {
+                delete_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Delete User and Return
+                        boolean result = UserController.deleteUser(getArguments().getString(ARG_USER_ID));
+
+                        if (result == true) {
+                            Snackbar.make(view, "User deleted.", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            getActivity().setResult(RESULT_OK);
+                            getActivity().finish();
+                        }
+                        else {
+                            Snackbar.make(view, "User not deleted.", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    }
+                });
+            }
         }
-
-        // Add Edit button
-        Button edit_btn = rootView.findViewById(R.id.detail_user_edit_button);
-        edit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Activity context = getActivity();
-                Intent intent = new Intent(context, UserDetailEditActivity.class);
-                intent.putExtra(ARG_USER_ID, getArguments().getString(ARG_USER_ID));
-                context.startActivityForResult(intent, UserDetailActivity.EDIT_REQUEST);
-            }
-        });
-
-        // Add Delete Button
-        Button delete_btn = rootView.findViewById(R.id.detail_user_delete_button);
-        delete_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // Delete User and Return
-                boolean result = UserController.deleteUser(getArguments().getString(ARG_USER_ID));
-
-                if (result == true) {
-                    Snackbar.make(view, "User deleted.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    getActivity().setResult(RESULT_OK);
-                    getActivity().finish();
-                }
-                else {
-                    Snackbar.make(view, "User not deleted.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            }
-        });
-
         return rootView;
+    }
+
+    private boolean checkinDeviceSuccess() {
+        String device_id;
+        Log.d("checkinDeviceSuccess", "checkinDeviceSuccess");
+        // Collect Data From Form
+        try {
+            device_id = mItem.device_id;
+            if (device_id == null) {
+                return false;
+            }
+            return mItem.checkinDevice(device_id);
+        }
+        catch (NullPointerException e) {
+            return false;
+        }
     }
 
 }

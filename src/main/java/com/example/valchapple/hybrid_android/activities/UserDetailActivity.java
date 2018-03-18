@@ -33,15 +33,6 @@ public class UserDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
@@ -87,6 +78,26 @@ public class UserDetailActivity extends AppCompatActivity {
                 case RESULT_OK:
                     // update view
                     Log.d("NEW_REQUEST", "UserDetailActivity");
+                    onResumeFragments();
+                    break;
+                default:
+                    return;
+            }
+        } else if (requestCode == CheckoutActivity.CHECK_OUT) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    Log.d("CHECK_OUT", "UserDetailActivity");
+                    onResumeFragments();
+                    break;
+                default:
+                    return;
+            }
+        } else if (requestCode == CheckoutActivity.CHECK_IN) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // update view
+                    Log.d("CHECK_IN", "UserDetailActivity");
                     onResumeFragments();
                     break;
                 default:

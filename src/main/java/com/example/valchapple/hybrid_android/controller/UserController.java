@@ -50,7 +50,12 @@ public class UserController extends AppCompatActivity {
         String group = user_JSON.getString("group");
         String device_id = user_JSON.getString("device_id");
         String start_datetime = user_JSON.getString("start_datetime");
-
+        if (device_id.equals("null")) {
+            device_id = null;
+        }
+        if (start_datetime.equals("null")) {
+            start_datetime = null;
+        }
         return new User(id, first_name, family_name, group, device_id, start_datetime);
     }
     private static String _makePostString(String first_name, String family_name, String group) {
@@ -195,6 +200,31 @@ public class UserController extends AppCompatActivity {
             }
         });
 
+    }
+
+    // GET Users Request
+    public static boolean requestUser(String user_id) {
+        isUpdating = true;
+        HttpUrl url = HttpUrl.parse(_getUserUrlString(user_id));
+        Request request = new Request.Builder().url(url).build();
+        OkHttpClient okHttp = client.getOkHttpClient();
+        try{
+            Response response = okHttp.newCall(request).execute();
+            String r = response.body().string();
+            JSONObject user_obj = new JSONObject(r);
+            User d = readJSONUser(user_obj);;
+            USER_MAP.replace(d.id, d);
+            int i = findIndexById(d.id);
+            if (i == -1) {
+                return false;
+            }
+            users.set(findIndexById(d.id), d);
+            sortUsers();
+            return true;
+        } catch (IOException | NullPointerException | JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // POST User Request

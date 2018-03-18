@@ -1,6 +1,8 @@
 package com.example.valchapple.hybrid_android.models;
 
 
+import com.example.valchapple.hybrid_android.controller.CheckoutController;
+
 /**
  * Created by valchapple on 3/6/18.
  * Class Model to use within app
@@ -30,6 +32,14 @@ public class User {
 
     public String getFullNameRev() {
         return this.family_name + ", " + this.first_name;
+    }
+
+    public boolean checkoutDevice(String device_id) {
+        return CheckoutController.checkoutDevice(this.id, device_id);
+    }
+
+    public boolean checkinDevice(String device_id) {
+        return CheckoutController.checkinDevice(this.id, device_id);
     }
 
     @Override

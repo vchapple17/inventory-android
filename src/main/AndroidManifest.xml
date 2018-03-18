@@ -69,6 +69,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.valchapple.hybrid_android.activities.UserListActivity" />
         </activity>
+        <activity
+            android:name=".activities.CheckoutActivity"
+            android:label="@string/title_checkout"
+            android:parentActivityName=".activities.UserDetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.valchapple.hybrid_android.activities.UserDetailActivity" />
+        </activity>
+
     </application>
 
 </manifest>

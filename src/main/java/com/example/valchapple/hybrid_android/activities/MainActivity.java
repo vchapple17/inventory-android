@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.valchapple.hybrid_android.R;
+import com.example.valchapple.hybrid_android.controller.CheckoutController;
 import com.example.valchapple.hybrid_android.controller.DeviceController;
 import com.example.valchapple.hybrid_android.controller.UserController;
 import com.example.valchapple.hybrid_android.models.MyHttpClient;
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         // INSTANCE
 
         DeviceController.client = (MyHttpClient)getApplicationContext();
+        UserController.client = (MyHttpClient)getApplicationContext();
+        CheckoutController.client = (MyHttpClient)getApplicationContext();
+
         DeviceController.requestDevices();
         UserController.requestUsers();
 

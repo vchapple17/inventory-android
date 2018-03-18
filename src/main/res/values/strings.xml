@@ -2,8 +2,10 @@
     <string name="app_name">Inventory App</string>
     <string name="home_btn_users">Users</string>
     <string name="home_btn_devices">Devices</string>
-    <string name="home_btn_checkin">Check In</string>
-    <string name="home_btn_checkout">Check Out</string>
+    <string name="btn_checkin">Check In Device</string>
+    <string name="btn_checkout">Check Out Device</string>
+
+    <string name="title_checkout">Device Rental</string>
 
     <string name="title_device_list">Devices</string>
     <string name="title_device_detail">Device Detail</string>
@@ -26,7 +28,10 @@
     <string name="label_group">Group:</string>
 
     <string name="label_user_save">Save User</string>
-    <string name="btn_user_detail_edit_btn">Edit User</string>
-    <string name="btn_user_detail_delete_btn">Delete User</string>
+    <string name="btn_user_detail_edit">Edit User</string>
+    <string name="btn_user_detail_delete">Delete User</string>
+
+    <string name="user_no_device">NO DEVICE</string>
+    <string name="label_device">Device:</string>
 
 </resources>

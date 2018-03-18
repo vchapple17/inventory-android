@@ -128,11 +128,10 @@ public class UserListActivity extends AppCompatActivity {
                 holder.mFamilyNameView.setText(mValues.get(position).family_name);
                 holder.mFirstNameView.setText(mValues.get(position).first_name);
                 holder.mGroupView.setText(mValues.get(position).group);
-                // Get Device Serial
+
+            // Get Device Serial
                 String device_serial = DeviceController.getSerialById( mValues.get(position).device_id);
-                if (device_serial == null) {
-                    holder.mDeviceSerialView.setText("No Device");
-                } else {
+                if (device_serial != null) {
                     holder.mDeviceSerialView.setText(device_serial);
                 }
                 holder.itemView.setTag(mValues.get(position));
