@@ -83,7 +83,7 @@ public class DeviceController extends AppCompatActivity {
         }
         return d.toString();
     }
-    private static String getDeviceUrlString(String device_id) {
+    private static String _getDeviceUrlString(String device_id) {
         return devicesURL + "/" + device_id;
     }
 
@@ -148,6 +148,31 @@ public class DeviceController extends AppCompatActivity {
 
     }
 
+    // GET Users Request
+    public static boolean requestDevice(String device_id) {
+        isUpdating = true;
+        HttpUrl url = HttpUrl.parse(_getDeviceUrlString(device_id));
+        Request request = new Request.Builder().url(url).build();
+        OkHttpClient okHttp = client.getOkHttpClient();
+        try{
+            Response response = okHttp.newCall(request).execute();
+            String r = response.body().string();
+            JSONObject obj = new JSONObject(r);
+            Device d = readJSONDevice(obj);;
+            DEVICE_MAP.replace(d.id, d);
+            int i = findIndexById(d.id);
+            if (i == -1) {
+                return false;
+            }
+            devices.set(findIndexById(d.id), d);
+            sortDevicesBySerial();
+            return true;
+        } catch (IOException | NullPointerException | JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // POST Device Request
     public static boolean postDeviceDetails(String serial, String model, String color) {
         HttpUrl url = HttpUrl.parse(devicesURL);
@@ -192,7 +217,7 @@ public class DeviceController extends AppCompatActivity {
             return false;
         }
 
-        String device_string = getDeviceUrlString(device_id);
+        String device_string = _getDeviceUrlString(device_id);
         HttpUrl url = HttpUrl.parse(device_string);
 
         RequestBody reqBody = RequestBody.create(MEDIA_TYPE_JSON, patchString);
@@ -225,7 +250,7 @@ public class DeviceController extends AppCompatActivity {
             return false;
         }
 
-        String device_string = getDeviceUrlString(device_id);
+        String device_string = _getDeviceUrlString(device_id);
         HttpUrl url = HttpUrl.parse(device_string);
 
         Request request = new Request.Builder().delete().url(url).build();

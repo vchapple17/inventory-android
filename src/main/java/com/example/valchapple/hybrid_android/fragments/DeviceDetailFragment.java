@@ -23,6 +23,8 @@ import com.example.valchapple.hybrid_android.models.Device;
 
 import static android.app.Activity.RESULT_OK;
 
+// TODO Refactor deleteBtn clickListener to check status to avoid repeat assignments of onClickListener Code
+
 /**
  * A fragment representing a single Device detail screen.
  * This fragment is either contained in a {@link DeviceListActivity}

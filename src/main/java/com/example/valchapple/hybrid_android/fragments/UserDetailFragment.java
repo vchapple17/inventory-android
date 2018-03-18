@@ -25,6 +25,8 @@ import com.example.valchapple.hybrid_android.models.User;
 
 import static android.app.Activity.RESULT_OK;
 
+// TODO Refactor deleteBtn clickListener to check status to avoid repeat assignments of onClickListenter Code
+
 /**
  * A fragment representing a single User detail screen.
  * This fragment is either contained in a {@link UserListActivity}
@@ -76,9 +78,10 @@ public class UserDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         if (getArguments().containsKey(ARG_USER_ID)) {
             mItem = UserController.USER_MAP.get(getArguments().getString(ARG_USER_ID));
-
+            Log.d("OnResume", "user fragment");
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
@@ -87,6 +90,70 @@ public class UserDetailFragment extends Fragment {
         }
     }
 
+    private void updateViewsOnDeviceCheckIn() {
+        if (getArguments().containsKey(ARG_USER_ID)) {
+            mItem = UserController.USER_MAP.get(getArguments().getString(ARG_USER_ID));
+            // Setup Detail as long as item is not null
+            if (mItem != null) {
+
+                // DETAILS
+                boolean hasDevice = true;
+                String serial = DeviceController.getSerialById(mItem.device_id);
+                if (serial == null) {
+                    hasDevice = false;
+                    serial = getString(R.string.user_no_device);
+                }
+                ((TextView) getView().findViewById(R.id.detail_user_device_serial)).setText(serial);
+                ((TextView) getView().findViewById(R.id.detail_user_first)).setText(mItem.first_name);
+                ((TextView) getView().findViewById(R.id.detail_user_family)).setText(mItem.family_name);
+                ((TextView) getView().findViewById(R.id.detail_user_group)).setText(mItem.group);
+                if (mItem.start_date != null) {
+                    ((TextView) getView().findViewById(R.id.detail_user_device_date)).setText(mItem.start_date);
+                } else {
+                    ((TextView) getView().findViewById(R.id.detail_user_device_date)).setText("");
+                }
+
+                Button rent_btn = getView().findViewById(R.id.detail_user_checkout_button);
+                // CHECK OUT DEVICE BUTTON
+                rent_btn.setText(getString(R.string.btn_checkout));
+
+                rent_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Activity context = getActivity();
+                        Intent intent = new Intent(context, CheckoutActivity.class);
+                        intent.putExtra(ARG_USER_ID, getArguments().getString(ARG_USER_ID));
+                        context.startActivityForResult(intent, CheckoutActivity.CHECK_OUT);
+                    }
+                });
+            }
+            Button delete_btn = getView().findViewById(R.id.detail_user_delete_button);
+            delete_btn.setBackgroundColor(getResources()
+                    .getColor(R.color.colorDelete, getContext().getTheme()));
+            delete_btn.setTextColor(getResources()
+                    .getColor(R.color.colorWhite, getContext().getTheme()));
+
+            delete_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Delete User and Return
+                    boolean result = UserController.deleteUser(getArguments().getString(ARG_USER_ID));
+
+                    if (result == true) {
+                        Snackbar.make(view, "User deleted.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        getActivity().setResult(RESULT_OK);
+                        getActivity().finish();
+                    }
+                    else {
+                        Snackbar.make(view, "User not deleted.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }
+            });
+
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -128,25 +195,13 @@ public class UserDetailFragment extends Fragment {
                             CharSequence text = "Device Checked In";
                             Toast toast = Toast.makeText(getContext(), text, duration);
                             toast.show();
-                            // Update Local versions
-                            int index = DeviceController.findIndexById(mItem.device_id);
-                            DeviceController.devices.get(index).is_rented = false;
-                            DeviceController.DEVICE_MAP.get(mItem.device_id).is_rented = false;
-                            index = UserController.findIndexById(mItem.id);
-                            UserController.users.get(index).start_date = null;
-                            UserController.users.get(index).device_id = null;
-                            UserController.USER_MAP.get(mItem.id).start_date = null;
-                            UserController.USER_MAP.get(mItem.id).device_id = null;
-//                            RefreshView
-//                            mItem.device_id = null;
-//                            mItem.start_date = null;
+                            updateViewsOnDeviceCheckIn();
                         } else {
                             // Save Failed
                             int duration = Toast.LENGTH_LONG;
                             CharSequence text = "Failed to check-in device";
                             Toast toast = Toast.makeText(getContext(), text, duration);
                             toast.show();
-//                            getActivity().setResult(RESULT_CANCELED);
                         }
                     }
                 });

@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.valchapple.hybrid_android.models.MyHttpClient;
-import com.example.valchapple.hybrid_android.models.User;
 
 import java.io.IOException;
 
@@ -14,8 +13,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-// TODO Implement Check in button - Update View
-// TODO checkinDevice update start_datetime?
 
 public class CheckoutController extends AppCompatActivity {
     public static MyHttpClient client;
@@ -45,21 +42,11 @@ public class CheckoutController extends AppCompatActivity {
         try{
             Response response = okHttp.newCall(request).execute();
             if (response.code() == 204) {
-                int i = UserController.findIndexById(user_id);
-                if (i != -1) {
-                    User u = UserController.users.get(i);
-                    u.device_id = device_id;
-                    UserController.requestUsers();
-                    assert (UserController.users.get(i).device_id != null);
+                if ((UserController.requestUser(user_id)) && (DeviceController.requestDevice(device_id))) {
+                    return true;
                 }
-                User u = UserController.USER_MAP.get(user_id);
-                if (u != null) {
-                    u.device_id = device_id;
-                    assert (UserController.USER_MAP.get(user_id).device_id == null);
-                }
-                UserController.requestUsers();
-                DeviceController.requestDevices();
-                return true;
+
+                return false;
             }
             return false;
         } catch (IOException | NullPointerException e) {
@@ -88,23 +75,11 @@ public class CheckoutController extends AppCompatActivity {
             // verify device was deleted from user
             if (response.code() == 204) {
                 // Success
-                // Update User Info
-                int i = UserController.findIndexById(user_id);
-                if (i != -1) {
-                    User u = UserController.users.get(i);
-                    u.device_id = null;
-                    u.start_date = null;
-                    assert (UserController.users.get(i).device_id == null);
-                    assert (UserController.users.get(i).start_date == null);
+                // Update User & device Info
+                if ((UserController.requestUser(user_id)) && (DeviceController.requestDevice(device_id))) {
+                    return true;
                 }
-                User u = UserController.USER_MAP.get(user_id);
-                if (u != null) {
-                    u.device_id = null;
-                    u.start_date = null;
-                    assert (UserController.USER_MAP.get(user_id).device_id == null);
-                    assert (UserController.USER_MAP.get(user_id).start_date == null);
-                }
-                return true;
+                return false;
             }
             else {
                 // Failed to delete
